@@ -50,9 +50,54 @@
         "mobile_description_size": 16,
         "mobile_counter_size": 28
       }
+    },
+    "brand_icons_KHfYrn": {
+      "type": "brand-icons",
+      "blocks": {
+        "image_QjG9aG": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector.png"
+          }
+        },
+        "image_H33YqN": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector_3.png"
+          }
+        },
+        "image_fnaYPJ": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector_1.png"
+          }
+        },
+        "image_ANXfxQ": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector_2.png"
+          }
+        },
+        "image_bKXgrA": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/gucci-logo-1_1.png"
+          }
+        }
+      },
+      "block_order": [
+        "image_QjG9aG",
+        "image_H33YqN",
+        "image_fnaYPJ",
+        "image_ANXfxQ",
+        "image_bKXgrA"
+      ],
+      "name": "Brand Icons",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "brand_icons_KHfYrn"
   ]
 }
