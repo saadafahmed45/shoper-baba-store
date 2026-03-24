@@ -1,76 +1,555 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+{% comment %}
+  ==================================================
+  DYNAMIC HEADER WITH LOGO IMAGE + TEXT SUPPORT
+  ==================================================
+{% endcomment %}
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+<div class="page-mock">
+  <header class="site-header" role="banner">
+    <div class="nav-container">
+      <!-- Dynamic Logo Area -->
+      <div class="logo-area">
+        {% if section.settings.logo != blank %}
+          {% comment %} Logo Image {% endcomment %}
+          <a href="{{ shop.url }}" class="logo-link logo-image">
+            <img 
+              src="{{ section.settings.logo | img_url: section.settings.logo_width }}" 
+              alt="{{ shop.name }}"
+              width="{{ section.settings.logo_width }}"
+              height="auto"
+              loading="eager"
+              class="logo-img"
+            >
+          </a>
+        {% else %}
+          {% comment %} Text Logo (with customizable text) {% endcomment %}
+          <a href="{{ shop.url }}" class="logo-link logo-text">
+            {{ section.settings.logo_text | default: shop.name }}
+          </a>
+        {% endif %}
+      </div>
 
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
+      <!-- Desktop & Mobile main menu - DYNAMIC from theme settings -->
+      <ul class="main-nav-links" id="mainNavMenu">
+        {% for link in linklists[section.settings.menu].links %}
+          <li class="nav-item {% if link.links != blank %}has-dropdown{% endif %}">
+            <a href="{{ link.url }}" class="nav-link">
+              {{ link.title }}
+              {% if link.links != blank %}
+                <i class="fas fa-chevron-down"></i>
+              {% endif %}
+            </a>
+            
+            {% if link.links != blank %}
+              <ul class="dropdown-menu">
+                {% for child_link in link.links %}
+                  <li>
+                    <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
 
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
+      <!-- Search bar -->
+      <div class="search-wrapper">
+        <form action="{{ routes.search_url }}" method="get" class="search-form" role="search">
+          <i class="fas fa-search search-icon"></i>
+          <input 
+            type="text" 
+            name="q" 
+            class="search-input" 
+            placeholder="Search for products..." 
+            aria-label="Search products"
+            value="{{ search.terms | escape }}"
+          >
+          <input type="hidden" name="options[prefix]" value="last">
+        </form>
+      </div>
 
-      {{ 'icon-cart.svg' | inline_asset_content }}
-    </a>
-  </div>
-</header>
+      <!-- Right side icons -->
+      <div class="user-actions">
+        {% if shop.customer_accounts_enabled %}
+          <a href="{{ routes.account_url }}" class="action-icon" aria-label="Account">
+            <i class="far fa-user"></i>
+          </a>
+        {% endif %}
+        <a href="{{ routes.cart_url }}" class="action-icon" aria-label="Shopping cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="cart-count">{{ cart.item_count }}</span>
+        </a>
+      </div>
 
-{% stylesheet %}
-  header {
-    height: 5rem;
+      <!-- Mobile hamburger toggle -->
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+</div>
+
+<style>
+  /* ========== LOGO STYLES ========== */
+  .logo-area {
+    flex-shrink: 0;
+  }
+
+  .logo-link {
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.2s ease;
+  }
+
+  .logo-link:hover {
+    opacity: 0.85;
+  }
+
+  /* Text Logo Styles */
+  .logo-text {
+    font-size: {{ section.settings.logo_text_size }}px;
+    font-weight: {{ section.settings.logo_text_weight }};
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #111 0%, #2c2c2c 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  /* Image Logo Styles */
+  .logo-image {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Rest of your existing CSS remains the same */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #fafaf8;
+  }
+
+  .site-header {
+    background-color: {{ section.settings.header_background }};
+    border-bottom: 1px solid #eaeef2;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+  }
+
+  .nav-container {
+    max-width: {{ section.settings.container_width }}px;
+    margin: 0 auto;
+    padding: 0 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    min-height: {{ section.settings.header_height }}px;
+    gap: 16px;
   }
-  header a {
-    position: relative;
-    text-decoration: none;
-    color: var(--color-foreground);
+
+  .main-nav-links {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 28px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
 
+  .nav-link {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: {{ section.settings.nav_font_size }}px;
+    color: {{ section.settings.nav_text_color }};
+    padding: 8px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover {
+    color: {{ section.settings.nav_hover_color }};
+  }
+
+  .nav-link i {
+    font-size: 0.75rem;
+    color: #5a6874;
+    transition: transform 0.2s;
+  }
+
+  .nav-link:hover i {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: -16px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    min-width: 220px;
+    padding: 12px 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 200;
+    list-style: none;
+  }
+
+  .nav-item:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .dropdown-menu a {
+    display: block;
+    padding: 10px 24px;
+    font-size: 0.9rem;
+    color: #2c3e4f;
+    text-decoration: none;
+  }
+
+  .dropdown-menu a:hover {
+    background-color: #f5f7f9;
+    color: #000;
+  }
+
+  .search-wrapper {
+    flex: 1;
+    max-width: 380px;
+  }
+
+  .search-form {
+    width: 100%;
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 10px 18px 10px 42px;
+    border: 1px solid #e2e8f0;
+    border-radius: 60px;
+    font-size: 0.9rem;
+    background-color: #fbfdfe;
+    outline: none;
+  }
+
+  .search-input:focus {
+    border-color: {{ section.settings.accent_color }};
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8b9eb0;
+  }
+
+  .user-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .action-icon {
+    font-size: 1.3rem;
+    color: {{ section.settings.icon_color }};
+    text-decoration: none;
+    position: relative;
+  }
+
+  .action-icon:hover {
+    color: {{ section.settings.icon_hover_color }};
+  }
+
+  .cart-count {
+    position: absolute;
+    top: -8px;
+    right: -12px;
+    background: {{ section.settings.accent_color }};
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 600;
+    border-radius: 30px;
+    padding: 2px 6px;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: {{ section.settings.nav_text_color }};
+  }
+
+  @media (max-width: 720px) {
+    .mobile-menu-toggle {
+      display: block;
+    }
+    
+    .main-nav-links {
+      position: fixed;
+      top: {{ section.settings.header_height }}px;
+      left: -100%;
+      width: 80%;
+      max-width: 300px;
+      height: calc(100vh - {{ section.settings.header_height }}px);
+      background: white;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 32px 24px;
+      gap: 24px;
+      transition: left 0.3s;
+      z-index: 1000;
+      border-right: 1px solid #eee;
+    }
+    
+    .main-nav-links.active {
+      left: 0;
+    }
+    
+    .search-wrapper {
+      order: 3;
+      width: 100%;
+      max-width: 100%;
+      margin-top: 12px;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    const toggleBtn = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('mainNavMenu');
+    
+    if (toggleBtn && navMenu) {
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navMenu.classList.toggle('active');
+        
+        const icon = toggleBtn.querySelector('i');
+        if (navMenu.classList.contains('active')) {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        } else {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+      });
+
+      // Handle mobile menu link clicks
+      const allMobileLinks = navMenu.querySelectorAll('a');
+      allMobileLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          if (window.innerWidth <= 720) {
+            const parentItem = link.closest('.has-dropdown');
+            
+            if (parentItem && link.closest('.dropdown-menu') === null) {
+              e.preventDefault();
+              parentItem.classList.toggle('open-mobile');
+              return;
+            }
+            
+            if (link.getAttribute('href') && link.getAttribute('href') !== '#') {
+              setTimeout(() => {
+                navMenu.classList.remove('active');
+                const iconBtn = toggleBtn.querySelector('i');
+                if (iconBtn) {
+                  iconBtn.classList.remove('fa-times');
+                  iconBtn.classList.add('fa-bars');
+                }
+              }, 100);
+            }
+          }
+        });
+      });
+    }
+
+    function handleResize() {
+      if (window.innerWidth > 720) {
+        if (navMenu) navMenu.classList.remove('active');
+        document.querySelectorAll('.has-dropdown.open-mobile').forEach(el => {
+          el.classList.remove('open-mobile');
+        });
+        if (toggleBtn) {
+          const icon = toggleBtn.querySelector('i');
+          if (icon && icon.classList.contains('fa-times')) {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          }
+        }
+      }
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+  })();
+</script>
 {% schema %}
 {
-  "name": "t:general.header",
+  "name": "Header",
+  "class": "site-header-section",
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "type": "header",
+      "content": "Logo Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image",
+      "info": "Recommended size: 200x60px. Leave empty to use text logo."
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 150
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text (fallback)",
+      "default": "SHOP.CO",
+      "info": "Used when no logo image is uploaded"
+    },
+    {
+      "type": "range",
+      "id": "logo_text_size",
+      "label": "Logo text size",
+      "min": 18,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "select",
+      "id": "logo_text_weight",
+      "label": "Logo text weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semibold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "800"
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Container max width",
+      "min": 1000,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1280
+    },
+    {
+      "type": "range",
+      "id": "header_height",
+      "label": "Header height",
+      "min": 60,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 70
+    },
+    {
+      "type": "header",
+      "content": "Navigation Settings"
     },
     {
       "type": "link_list",
-      "id": "customer_account_menu",
-      "label": "t:labels.customer_account_menu",
-      "default": "customer-account-main-menu"
+      "id": "menu",
+      "label": "Main navigation menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "range",
+      "id": "nav_font_size",
+      "label": "Navigation font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "header_background",
+      "label": "Header background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "nav_text_color",
+      "label": "Navigation text color",
+      "default": "#1a1f2c"
+    },
+    {
+      "type": "color",
+      "id": "nav_hover_color",
+      "label": "Navigation hover color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#1f2937"
+    },
+    {
+      "type": "color",
+      "id": "icon_hover_color",
+      "label": "Icon hover color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Default Header",
+      "category": "Navigation"
     }
   ]
 }

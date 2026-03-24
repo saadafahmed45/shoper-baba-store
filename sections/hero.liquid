@@ -1,0 +1,604 @@
+<div class="hero_section">
+  <div class="my_container">
+    <div class="wrapper">
+      <div class="hero_content">
+        <h1>FIND CLOTHES THAT MATCHES YOUR STYLE</h1>
+        <p>
+          Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality
+          and cater to your sense of style.
+        </p>
+        <div>
+          <button class="btn btn-dark">
+            Shop Now
+          </button>
+        </div>
+
+        <div class="counter_sec">
+          <div class="counter">
+            <h2>200+</h2>
+            <span>International Brands</span>
+          </div>
+          <div class="counter">
+            <h2>2,000+</h2>
+            <span>Happy Customers</span>
+          </div>
+          <div class="counter">
+            <h2>30+</h2>
+            <span>Countries Served</span>
+          </div>
+        </div>
+      </div>
+
+      {% comment %} Hero Image with proper Liquid syntax {% endcomment %}
+      <div class="hero_img">
+        {% if section.settings.hero_img != blank %}
+          <img 
+            src="{{ section.settings.hero_img | img_url: 'master' }}" 
+            alt="{{ section.settings.hero_img_alt | default: 'Hero image' }}"
+            width="100%"
+            height="auto"
+            loading="eager"
+          >
+        {% else %}
+          {% comment %} Placeholder image if none is uploaded {% endcomment %}
+          <div class="hero_placeholder">
+            <svg width="100%" height="100%" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="600" fill="#F3F4F6"/>
+              <path d="M300 200C250 200 210 240 210 290C210 340 250 380 300 380C350 380 390 340 390 290C390 240 350 200 300 200Z" fill="#9CA3AF"/>
+              <circle cx="300" cy="380" r="120" fill="#9CA3AF"/>
+              <rect x="250" y="450" width="100" height="100" fill="#6B7280"/>
+            </svg>
+            <p class="placeholder-text">Upload hero image in theme settings</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hero_section {
+    background-color: {{ section.settings.hero_bg_color | default: '#f8f9fa' }};
+    padding: {{ section.settings.hero_padding_top }}px {{ section.settings.hero_padding_sides }}px {{ section.settings.hero_padding_bottom }}px {{ section.settings.hero_padding_sides }}px;
+    overflow: hidden;
+  }
+
+  .my_container {
+    max-width: {{ section.settings.container_width }}px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: {{ section.settings.content_gap }}px;
+    flex-wrap: wrap;
+  }
+
+  .hero_content {
+    flex: 1;
+    min-width: 300px;
+    max-width: 600px;
+  }
+
+  .hero_content h1 {
+    font-size: {{ section.settings.title_size }}px;
+    font-weight: {{ section.settings.title_weight }};
+    line-height: 1.2;
+    margin-bottom: {{ section.settings.title_margin_bottom }}px;
+    color: {{ section.settings.title_color }};
+    letter-spacing: -0.02em;
+  }
+
+  .hero_content p {
+    font-size: {{ section.settings.description_size }}px;
+    line-height: 1.6;
+    margin-bottom: {{ section.settings.description_margin_bottom }}px;
+    color: {{ section.settings.description_color }};
+    opacity: 0.8;
+  }
+
+  .btn-dark {
+    display: inline-block;
+    background-color: {{ section.settings.button_bg_color }};
+    color: {{ section.settings.button_text_color }};
+    padding: {{ section.settings.button_padding_y }}px {{ section.settings.button_padding_x }}px;
+    border-radius: {{ section.settings.button_border_radius }}px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: {{ section.settings.button_font_size }}px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: {{ section.settings.button_margin_bottom }}px;
+  }
+
+  .btn-dark:hover {
+    background-color: {{ section.settings.button_hover_bg }};
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .counter_sec {
+    display: flex;
+    gap: {{ section.settings.counter_gap }}px;
+    flex-wrap: wrap;
+    margin-top: {{ section.settings.counter_margin_top }}px;
+  }
+
+  .counter {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  .counter h2 {
+    font-size: {{ section.settings.counter_number_size }}px;
+    font-weight: {{ section.settings.counter_number_weight }};
+    margin-bottom: 8px;
+    color: {{ section.settings.counter_number_color }};
+  }
+
+  .counter span {
+    font-size: {{ section.settings.counter_label_size }}px;
+    color: {{ section.settings.counter_label_color }};
+    display: block;
+  }
+
+  .hero_img {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
+  }
+
+  .hero_img img {
+    max-width: 100%;
+    height: auto;
+    border-radius: {{ section.settings.image_border_radius }}px;
+    box-shadow: {{ section.settings.image_shadow }};
+  }
+
+  .hero_placeholder {
+    background: #f3f4f6;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .hero_placeholder svg {
+    max-width: 300px;
+    margin-bottom: 20px;
+  }
+
+  .placeholder-text {
+    color: #9ca3af;
+    font-size: 14px;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 968px) {
+    .wrapper {
+      flex-direction: {% if section.settings.mobile_layout == 'image_first' %}column-reverse{% else %}column{% endif %};
+      text-align: {% if section.settings.mobile_text_align %}center{% else %}left{% endif %};
+    }
+
+    .hero_content {
+      text-align: {% if section.settings.mobile_text_align %}center{% else %}left{% endif %};
+    }
+
+    .counter_sec {
+      justify-content: {% if section.settings.mobile_text_align %}center{% else %}flex-start{% endif %};
+    }
+
+    .hero_content h1 {
+      font-size: {{ section.settings.mobile_title_size }}px;
+    }
+
+    .hero_content p {
+      font-size: {{ section.settings.mobile_description_size }}px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero_section {
+      padding: 40px 20px;
+    }
+
+    .counter_sec {
+      gap: 20px;
+    }
+
+    .counter {
+      min-width: 80px;
+    }
+
+    .counter h2 {
+      font-size: {{ section.settings.mobile_counter_size }}px;
+    }
+
+    .counter span {
+      font-size: 12px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Hero Section",
+  "tag": "section",
+  "class": "hero-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_img",
+      "label": "Hero image",
+      "info": "Recommended size: 800x800px or larger for retina displays"
+    },
+    {
+      "type": "text",
+      "id": "hero_img_alt",
+      "label": "Image alt text",
+      "default": "Hero image",
+      "info": "Important for accessibility and SEO"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "label": "Image border radius",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "text",
+      "id": "image_shadow",
+      "label": "Image shadow",
+      "default": "0 20px 40px rgba(0,0,0,0.1)",
+      "info": "CSS box-shadow value"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "color",
+      "id": "hero_bg_color",
+      "label": "Background color",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Container max width",
+      "min": 1000,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1280
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "label": "Content gap",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "hero_padding_top",
+      "label": "Padding top",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "hero_padding_bottom",
+      "label": "Padding bottom",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "hero_padding_sides",
+      "label": "Padding sides",
+      "min": 20,
+      "max": 80,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Title Settings"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title font size",
+      "min": 32,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Title font weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semibold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "800"
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "label": "Title bottom margin",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Description Settings"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#4b5563"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description font size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "description_margin_bottom",
+      "label": "Description bottom margin",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Button Settings"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg",
+      "label": "Button hover background",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button font size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_padding_y",
+      "label": "Button padding vertical",
+      "min": 8,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_padding_x",
+      "label": "Button padding horizontal",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "button_margin_bottom",
+      "label": "Button bottom margin",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Counter Settings"
+    },
+    {
+      "type": "color",
+      "id": "counter_number_color",
+      "label": "Counter number color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "counter_number_size",
+      "label": "Counter number size",
+      "min": 24,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "select",
+      "id": "counter_number_weight",
+      "label": "Counter number weight",
+      "options": [
+        { "value": "600", "label": "Semibold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "counter_label_color",
+      "label": "Counter label color",
+      "default": "#6b7280"
+    },
+    {
+      "type": "range",
+      "id": "counter_label_size",
+      "label": "Counter label size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "counter_gap",
+      "label": "Counter gap",
+      "min": 20,
+      "max": 80,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "counter_margin_top",
+      "label": "Counter top margin",
+      "min": 20,
+      "max": 80,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Mobile Settings"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        { "value": "content_first", "label": "Content first" },
+        { "value": "image_first", "label": "Image first" }
+      ],
+      "default": "content_first"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_text_align",
+      "label": "Center text on mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "mobile_title_size",
+      "label": "Mobile title size",
+      "min": 28,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "mobile_description_size",
+      "label": "Mobile description size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_counter_size",
+      "label": "Mobile counter size",
+      "min": 24,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Section",
+      "category": "Hero pages"
+    }
+  ]
+}
+{% endschema %}
