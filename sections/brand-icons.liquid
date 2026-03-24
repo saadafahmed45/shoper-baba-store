@@ -1,0 +1,93 @@
+<div class="brand-icons-section">
+    <div class="container">
+
+        <div class="brand-wrapper">
+            {% for block in section.blocks %}
+
+            <div class="brand-item">
+                <img src="{{ block.settings.image | image_url: width: 200 }}" alt="brand">
+            </div>
+
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .brand-icons-section {
+        background: #000;
+        padding: 50px 5px;
+    }
+
+    .brand-wrapper {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 40px;
+        align-items: center;
+        justify-items: center;
+    }
+
+    .brand-item img {
+        max-width: 120px;
+        opacity: 0.7;
+        transition: 0.3s;
+    }
+
+    .brand-item img:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    /* Tablet */
+
+    @media(max-width:992px) {
+
+        .brand-wrapper {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+    }
+
+    /* Mobile */
+
+    @media(max-width:576px) {
+
+        .brand-wrapper {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .brand-item img {
+            max-width: 90px;
+        }
+
+    }
+</style>
+
+
+{% schema %}
+{
+"name": "Brand Icons",
+"settings": [],
+"blocks":[
+{
+"type":"image",
+"name":"Brand Image",
+"settings":[
+{
+"type":"image_picker",
+"id":"image",
+"label":"Brand Image"
+}
+]
+}
+],
+
+"presets":[
+{
+"name":"Brand Icons"
+}
+]
+}
+{% endschema %}
