@@ -1,45 +1,256 @@
-{% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
+<div class="product_page">
+  <div class="container">
+    <div class="product_wrapper">
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
-{% endcomment %}
+      <div class="product_gallery_container">
+        <div class="thumbnail_list">
+          {% for image in product.images %}
+            <div class="thumb_wrapper {% if forloop.first %}active{% endif %}" onclick="changeImage(this, '{{ image | img_url: '800x' }}')">
+              <img src="{{ image | img_url: '200x200', crop: 'center' }}" alt="{{ product.title }}" loading="lazy">
+            </div>
+          {% endfor %}
+        </div>
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
+        <div class="main_image_view">
+          <img 
+            id="mainProductImage"
+            src="{{ product.featured_image | img_url: '800x' }}"
+            alt="{{ product.title }}"
+          >
+        </div>
+      </div>
+
+      <div class="product_info_panel">
+        <div class="product_header">
+          <p class="vendor_name">{{ product.vendor | uppercase }}</p>
+          <h1 class="product_title">{{ product.title }}</h1>
+          
+          <div class="price_box">
+            <span class="current_price">{{ product.price | money }}</span>
+            {% if product.compare_at_price > product.price %}
+              <span class="old_price">{{ product.compare_at_price | money }}</span>
+              <span class="sale_badge">Save {{ product.compare_at_price | minus: product.price | money_without_trailing_zeros }}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="product_description">
+          {{ product.description }}
+        </div>
+
+        {% form 'product', product, class: 'product_form' %}
+          <input type="hidden" name="id" id="product-id" value="{{ product.selected_or_first_available_variant.id }}">
+
+          {% unless product.has_only_default_variant %}
+            <div class="variant_selector">
+              <p class="label_text">Select Options</p>
+              <div class="variant_pills">
+                {% for variant in product.variants %}
+                  <label class="pill_item">
+                    <input type="radio" name="id_select" value="{{ variant.id }}" 
+                      {% if variant == product.selected_or_first_available_variant %}checked{% endif %}
+                      onchange="updateVariantId(this.value)">
+                    <span class="pill_content">
+                      {{ variant.title }}
+                    </span>
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
+          {% endunless %}
+
+          <div class="purchase_actions">
+            <p class="label_text">Quantity</p>
+            <div class="qty_selector">
+              <button type="button" class="qty_btn" onclick="adjustQty(-1)">-</button>
+              <input type="number" id="qty_input" name="quantity" value="1" min="1">
+              <button type="button" class="qty_btn" onclick="adjustQty(1)">+</button>
+            </div>
+
+            <div class="button_group">
+              <button type="submit" name="add" class="btn_primary add_to_cart">
+                <span>Add to Cart</span>
+              </button>
+              <div class="dynamic_checkout">
+                {{ form | payment_button }}
+              </div>
+            </div>
+          </div>
+        {% endform %}
+      </div>
+
+    </div>
+  </div>
 </div>
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
+<style>
+  :root {
+    --primary-black: #121212;
+    --gray-bg: #F3F3F3;
+    --border-color: #E5E5E5;
+    --sale-red: #DB4444;
+  }
 
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
+  .container { max-width: 1280px; margin: 0 auto; padding: 40px 20px; }
+  
+  .product_wrapper {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+  }
 
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
+  /* --- Gallery Styles --- */
+  .product_gallery_container {
+    display: flex;
+    flex: 1.5;
+    gap: 20px;
+    position: sticky;
+    top: 100px; /* Sticky on scroll */
+  }
 
-    <input type="text" name="quantity" min="1" value="1">
+  .thumbnail_list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 80px;
+  }
 
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
-</div>
+  .thumb_wrapper {
+    border: 2px solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.2s;
+    aspect-ratio: 1/1;
+  }
+
+  .thumb_wrapper.active { border-color: var(--primary-black); }
+  .thumb_wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+  .main_image_view {
+    flex-grow: 1;
+    background: var(--gray-bg);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .main_image_view img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.3s ease;
+  }
+
+  /* --- Info Section --- */
+  .product_info_panel { flex: 1; }
+  
+  .vendor_name { color: #757575; font-size: 14px; letter-spacing: 1px; margin-bottom: 8px; }
+  .product_title { font-size: 38px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+  
+  .price_box { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+  .current_price { font-size: 28px; font-weight: 700; color: var(--primary-black); }
+  .old_price { text-decoration: line-through; color: #999; font-size: 20px; }
+  .sale_badge { background: var(--sale-red); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 14px; font-weight: 600; }
+
+  .product_description { line-height: 1.6; color: #444; margin-bottom: 30px; border-top: 1px solid var(--border-color); padding-top: 20px; }
+
+  .label_text { font-weight: 700; font-size: 14px; text-transform: uppercase; margin-bottom: 12px; display: block; }
+
+  /* --- Variant Pills --- */
+  .variant_pills { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+  .pill_item input { display: none; }
+  .pill_content {
+    display: inline-block;
+    padding: 10px 24px;
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+  }
+  .pill_item input:checked + .pill_content {
+    background: var(--primary-black);
+    color: #fff;
+    border-color: var(--primary-black);
+  }
+
+  /* --- Qty & Buttons --- */
+  .qty_selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    width: fit-content;
+    border-radius: 50px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+  .qty_btn { background: none; border: none; width: 45px; height: 45px; cursor: pointer; font-size: 18px; }
+  .qty_btn:hover { background: #f0f0f0; }
+  #qty_input { width: 50px; text-align: center; border: none; -moz-appearance: textfield; font-weight: 700; }
+  #qty_input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  .btn_primary {
+    width: 100%;
+    padding: 18px;
+    background: var(--primary-black);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    margin-bottom: 12px;
+  }
+  .btn_primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+
+  /* --- Mobile Responsive --- */
+  @media (max-width: 1024px) {
+    .product_wrapper { gap: 30px; }
+    .product_title { font-size: 30px; }
+  }
+
+  @media (max-width: 768px) {
+    .product_wrapper { flex-direction: column; }
+    .product_gallery_container { flex-direction: column-reverse; position: static; width: 100%; }
+    .thumbnail_list { flex-direction: row; width: 100%; overflow-x: auto; padding-bottom: 10px; }
+    .thumb_wrapper { width: 70px; flex-shrink: 0; }
+    .main_image_view { border-radius: 0; margin: 0 -20px; }
+    .container { padding: 0 20px 40px; }
+  }
+</style>
+
+<script>
+  function changeImage(element, src) {
+    const mainImg = document.getElementById("mainProductImage");
+    
+    // Smooth transition
+    mainImg.style.opacity = '0';
+    
+    setTimeout(() => {
+      mainImg.src = src;
+      mainImg.style.opacity = '1';
+    }, 200);
+
+    // Update active thumbnail
+    document.querySelectorAll('.thumb_wrapper').forEach(thumb => thumb.classList.remove('active'));
+    element.classList.add('active');
+  }
+
+  function adjustQty(amount) {
+    const input = document.getElementById("qty_input");
+    let val = parseInt(input.value) + amount;
+    if (val < 1) val = 1;
+    input.value = val;
+  }
+
+  function updateVariantId(id) {
+    document.getElementById('product-id').value = id;
+    
+    // Note: If you want to update price/images dynamically based on variant selection, 
+    // you would typically need a deeper Shopify JS integration (like the 'VariantSelects' component).
+  }
+</script>
 
 {% schema %}
 {

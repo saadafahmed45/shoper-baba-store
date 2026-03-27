@@ -4,40 +4,137 @@
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
+<h1>{{ 'collections.title' | t }}</h1>
 
-<h1>{{ collection.title }}</h1>
-
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
-      </div>
+<!-- 🔽 FILTER DROPDOWN -->
+<div class="filter_bar">
+  <select id="collectionFilter" onchange="filterCollections()">
+    <option value="all">All Collections</option>
+    {% for collection in collections %}
+      <option value="{{ collection.handle }}">{{ collection.title }}</option>
     {% endfor %}
-
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
+  </select>
 </div>
 
-{% stylesheet %}
-  .collection-products {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+<!-- 🔽 COLLECTION GRID -->
+<div
+  id="collectionGrid"
+  class="collections {{ section.settings.grid_item_width }}"
+  style="--grid-gap: {{ section.settings.grid_gap }}px"
+>
+  {% for collection in collections %}
+    <div class="collection-item" data-handle="{{ collection.handle }}">
+      
+      <a class="collection-card" href="{{ collection.url }}">
+        {% if collection.featured_image %}
+          <img 
+            src="{{ collection.featured_image | img_url: '600x' }}" 
+            class="collection-card__image"
+          >
+        {% endif %}
+
+        <div class="collection-card__content">
+          <p class="title">{{ collection.title }}</p>
+
+          {% if collection.description %}
+            <p class="desc">
+              {{ collection.description | strip_html | truncatewords: 12 }}
+            </p>
+          {% endif %}
+        </div>
+      </a>
+
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+/* Filter */
+.filter_bar {
+  margin-bottom: 20px;
+}
+
+.filter_bar select {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+/* Grid */
+.collections {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--grid-gap);
+}
+
+/* Card */
+.collection-card {
+  display: block;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #fff;
+  transition: 0.3s;
+}
+
+.collection-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Image */
+.collection-card__image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+/* Content */
+.collection-card__content {
+  padding: 15px;
+}
+
+.collection-card__content .title {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.collection-card__content .desc {
+  font-size: 14px;
+  color: gray;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .collections {
+    grid-template-columns: repeat(2, 1fr);
   }
-{% endstylesheet %}
+}
+
+@media (max-width: 480px) {
+  .collections {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<script>
+function filterCollections() {
+  let selected = document.getElementById("collectionFilter").value;
+  let items = document.querySelectorAll(".collection-item");
+
+  items.forEach(item => {
+    if (selected === "all") {
+      item.style.display = "block";
+    } else {
+      if (item.dataset.handle === selected) {
+        item.style.display = "block";
+      } else {
+        item.style.display = "none";
+      }
+    }
+  });
+}
+</script>
 
 {% schema %}
 {

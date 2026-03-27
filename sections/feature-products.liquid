@@ -1,123 +1,197 @@
 <div class="feature_products">
   <div class="container">
     
-    <div class="feature_products_title text-center">
-      <h2>{{ section.settings.title }}</h2>
-    </div>
-
-    <div class="feature_products_list">
-
-      {% for product in collections[section.settings.collection].products limit: section.settings.product_limit %}
-      
-      <div class="feature_product_item">
-        <a href="{{ product.url }}">
-          
-          <img 
-            src="{{ product.featured_image | image_url: width: 400 }}" 
-            alt="{{ product.title }}"
-          >
-
-          <div class="products_content">
-            <h3 class="products_title">{{ product.title }}</h3>
-
-            <span class="rating_icon">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-            </span>
-
-            <p class="products_price">
-              {{ product.price | money_without_trailing_zeros }}
-            </p>
-          </div>
-
-        </a>
+    {% if section.settings.title != blank %}
+      <div class="feature_products_title text-center">
+        <h2>{{ section.settings.title }}</h2>
       </div>
+    {% endif %}
 
+    <div class="feature_products_grid">
+      {% for product in collections[section.settings.collection].products limit: section.settings.product_limit %}
+        <div class="feature_product_item">
+          <a href="{{ product.url }}">
+            <div class="product_image_wrapper">
+              <img 
+                src="{{ product.featured_image | image_url: width: 600 }}" 
+                alt="{{ product.title | escape }}"
+                loading="lazy"
+              >
+            </div>
+
+            <div class="products_content">
+              <h3 class="products_title">{{ product.title }}</h3>
+
+              <div class="rating_icon">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+
+              <p class="products_price">
+                {{ product.price | money_without_trailing_zeros }}
+              </p>
+            </div>
+          </a>
+        </div>
       {% endfor %}
     </div>
 
-    <div class="see_all_products text-center " style="margin-top: 50px;">
-      <a href="{{ collections[section.settings.collection].url }}" class="btn btn-outline-dark">
-        View All
-      </a>`
-    </div>
+    {% if section.settings.show_view_all %}
+      <div class="see_all_products text-center">
+        <a href="{{ collections[section.settings.collection].url }}" class="btn btn-outline-dark">
+          View All
+        </a>
+      </div>
+    {% endif %}
   </div>
 </div>
 
 <style>
-.rating_icon {
-  color: #ffc634;
+/* Section Spacing */
+.feature_products {
+  padding: 60px 0;
+  background-color: #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.feature_products_title h2 {
+  font-size: clamp(32px, 5vw, 48px); /* Responsive font size */
+  margin-bottom: 40px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+/* ========== GRID LAYOUT ========== */
+.feature_products_grid {
+  display: grid;
+  /* 4 columns on desktop by default */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px 20px; /* Vertical gap, Horizontal gap */
+}
+
+.feature_product_item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 20px;
+  background: #fff;
+  height: 100%;
 }
 
 .feature_product_item a {
   text-decoration: none;
   color: inherit;
-}
-
-.feature_products {
-  padding: 50px 0;
-}
-
-.feature_products_title h2 {
-  font-size: 50px;
-  margin-bottom: 30px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.feature_products_list {
   display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.feature_product_item {
-  width: 23%;
-  /* border: 1px solid #eee; */
-  padding:10px 10px;
-  text-align: center;
-  transition: all 0.3s ease;
-  border-radius: 20px;
-}
-
-.products_content {
-  text-align: {{ section.settings.products_align }};
+  flex-direction: column;
+  height: 100%;
 }
 
 .feature_product_item:hover {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transform: translateY(-5px);
 }
 
-.feature_product_item img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  margin-bottom: 15px;
+/* Image Handling */
+.product_image_wrapper {
+  aspect-ratio: 1 / 1; /* Keeps images square */
+  overflow: hidden;
   border-radius: 20px;
+  margin-bottom: 15px;
+  background-color: #F0F0F0;
+}
+
+.product_image_wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.feature_product_item:hover img {
+  transform: scale(1.05);
+}
+
+/* Content */
+.products_content {
+  text-align: {{ section.settings.products_align }};
+  padding: 0 5px;
 }
 
 .products_title {
   font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.rating_icon {
+  color: #ffc634;
+  font-size: 14px;
   margin-bottom: 10px;
 }
 
 .products_price {
-  font-size: 20px;
-  color: #333;
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
 }
 
-/* Responsive */
-@media(max-width: 992px){
-  .feature_product_item {
-    width: 48%;
+.see_all_products {
+  margin-top: 50px;
+}
+
+.btn-outline-dark {
+  padding: 12px 50px;
+  border-radius: 50px;
+  text-transform: capitalize;
+  font-weight: 500;
+  border: 1px solid #000;
+  color: #000;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.btn-outline-dark:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* ========== RESPONSIVE GRID ========== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .feature_products_grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media(max-width: 576px){
-  .feature_product_item {
-    width: 100%;
+/* Large Phones */
+@media (max-width: 768px) {
+  .feature_products_grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  .feature_products {
+    padding: 40px 0;
+  }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+  .feature_products_grid {
+    /* Set to 1 if you want huge items, or 2 if you want a compact shop look */
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .product_image_wrapper {
+    margin-bottom: 10px;
   }
 }
 </style>
@@ -139,16 +213,25 @@
       "label": "Collection"
     },
     {
-      "type": "number",
+      "type": "range",
       "id": "product_limit",
       "label": "Number of products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
       "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' button",
+      "default": true
     },
     {
       "type": "select",
       "id": "products_align",
       "label": "Products Alignment",
-      "default": "center",
+      "default": "left",
       "options": [
         { "value": "left", "label": "Left" },
         { "value": "center", "label": "Center" },

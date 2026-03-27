@@ -14,41 +14,8 @@
       "settings": {
         "hero_img": "shopify://shop_images/kraken-kitty-chroma-01-500x500.webp",
         "hero_img_alt": "Hero image",
-        "image_border_radius": 20,
-        "image_shadow": "0 20px 40px rgba(0,0,0,0.1)",
         "hero_bg_color": "#f8f9fa",
-        "container_width": 1280,
-        "content_gap": 60,
-        "hero_padding_top": 80,
-        "hero_padding_bottom": 80,
-        "hero_padding_sides": 40,
-        "title_color": "#000000",
-        "title_size": 56,
-        "title_weight": "800",
-        "title_margin_bottom": 20,
-        "description_color": "#4b5563",
-        "description_size": 18,
-        "description_margin_bottom": 30,
-        "button_bg_color": "#000000",
-        "button_hover_bg": "#333333",
-        "button_text_color": "#ffffff",
-        "button_font_size": 16,
-        "button_padding_y": 14,
-        "button_padding_x": 40,
-        "button_border_radius": 40,
-        "button_margin_bottom": 30,
-        "counter_number_color": "#000000",
-        "counter_number_size": 36,
-        "counter_number_weight": "700",
-        "counter_label_color": "#6b7280",
-        "counter_label_size": 14,
-        "counter_gap": 40,
-        "counter_margin_top": 40,
-        "mobile_layout": "content_first",
-        "mobile_text_align": true,
-        "mobile_title_size": 36,
-        "mobile_description_size": 16,
-        "mobile_counter_size": 28
+        "container_width": 1280
       }
     },
     "brand_icons_KHfYrn": {
@@ -94,10 +61,32 @@
       ],
       "name": "Brand Icons",
       "settings": {}
+    },
+    "feature_products_zAAfcJ": {
+      "type": "feature-products",
+      "name": "Feature-Products",
+      "settings": {
+        "title": "{{ section.settings.collection.title }}",
+        "collection": "new-arrivals",
+        "product_limit": 4,
+        "products_align": "center"
+      }
+    },
+    "feature_products_TLPe3T": {
+      "type": "feature-products",
+      "name": "Feature-Products",
+      "settings": {
+        "title": "{{ section.settings.collection.title }}",
+        "collection": "top-selling",
+        "product_limit": 4,
+        "products_align": "center"
+      }
     }
   },
   "order": [
     "main",
-    "brand_icons_KHfYrn"
+    "brand_icons_KHfYrn",
+    "feature_products_zAAfcJ",
+    "feature_products_TLPe3T"
   ]
 }
