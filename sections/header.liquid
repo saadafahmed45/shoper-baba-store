@@ -1,16 +1,19 @@
 {% comment %}
   ==================================================
-  DYNAMIC HEADER WITH LOGO IMAGE + TEXT SUPPORT
+  FULLY RESPONSIVE HEADER WITH SCROLL HIDE/SHOW
   ==================================================
 {% endcomment %}
 
-<div class="page-mock">
-  <header class="site-header" role="banner">
+<div class="header-section-wrapper">
+  <header class="site-header" id="siteHeader" role="banner">
     <div class="nav-container">
-      <!-- Dynamic Logo Area -->
+      
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+
       <div class="logo-area">
         {% if section.settings.logo != blank %}
-          {% comment %} Logo Image {% endcomment %}
           <a href="{{ shop.url }}" class="logo-link logo-image">
             <img 
               src="{{ section.settings.logo | img_url: section.settings.logo_width }}" 
@@ -22,39 +25,48 @@
             >
           </a>
         {% else %}
-          {% comment %} Text Logo (with customizable text) {% endcomment %}
           <a href="{{ shop.url }}" class="logo-link logo-text">
             {{ section.settings.logo_text | default: shop.name }}
           </a>
         {% endif %}
       </div>
 
-      <!-- Desktop & Mobile main menu - DYNAMIC from theme settings -->
-      <ul class="main-nav-links" id="mainNavMenu">
-        {% for link in linklists[section.settings.menu].links %}
-          <li class="nav-item {% if link.links != blank %}has-dropdown{% endif %}">
-            <a href="{{ link.url }}" class="nav-link">
-              {{ link.title }}
-              {% if link.links != blank %}
-                <i class="fas fa-chevron-down"></i>
-              {% endif %}
-            </a>
-            
-            {% if link.links != blank %}
-              <ul class="dropdown-menu">
-                {% for child_link in link.links %}
-                  <li>
-                    <a href="{{ child_link.url }}">{{ child_link.title }}</a>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
+      <nav class="nav-menu-wrapper" id="mainNavMenu">
+        <div class="mobile-menu-header">
+           <span class="mobile-menu-title">Menu</span>
+           <button class="close-menu" id="closeMenu"><i class="fas fa-times"></i></button>
+        </div>
 
-      <!-- Search bar -->
-      <div class="search-wrapper">
+        <div class="mobile-search-container">
+           <form action="{{ routes.search_url }}" method="get" class="search-form">
+            <input type="text" name="q" class="search-input" placeholder="Search products...">
+            <button type="submit" class="search-submit"><i class="fas fa-search"></i></button>
+          </form>
+        </div>
+
+        <ul class="main-nav-links">
+          {% for link in linklists[section.settings.menu].links %}
+            <li class="nav-item {% if link.links != blank %}has-dropdown{% endif %}">
+              <a href="{{ link.url }}" class="nav-link">
+                {{ link.title }}
+                {% if link.links != blank %}
+                  <i class="fas fa-chevron-down dropdown-icon"></i>
+                {% endif %}
+              </a>
+              
+              {% if link.links != blank %}
+                <ul class="dropdown-menu">
+                  {% for child_link in link.links %}
+                    <li><a href="{{ child_link.url }}">{{ child_link.title }}</a></li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+
+      <div class="search-wrapper desktop-only">
         <form action="{{ routes.search_url }}" method="get" class="search-form" role="search">
           <i class="fas fa-search search-icon"></i>
           <input 
@@ -62,15 +74,15 @@
             name="q" 
             class="search-input" 
             placeholder="Search for products..." 
-            aria-label="Search products"
             value="{{ search.terms | escape }}"
           >
-          <input type="hidden" name="options[prefix]" value="last">
         </form>
       </div>
 
-      <!-- Right side icons -->
       <div class="user-actions">
+        <a href="{{ routes.search_url }}" class="action-icon mobile-only" aria-label="Search">
+           <i class="fas fa-search"></i>
+        </a>
         {% if shop.customer_accounts_enabled %}
           <a href="{{ routes.account_url }}" class="action-icon" aria-label="Account">
             <i class="far fa-user"></i>
@@ -82,336 +94,224 @@
         </a>
       </div>
 
-      <!-- Mobile hamburger toggle -->
-      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
-        <i class="fas fa-bars"></i>
-      </button>
     </div>
   </header>
 </div>
 
 <style>
-  /* ========== LOGO STYLES ========== */
-  .logo-area {
-    flex-shrink: 0;
+  /* ========== CORE RESET & VARIABLES ========== */
+  :root {
+    --header-bg: {{ section.settings.header_background }};
+    --nav-text: {{ section.settings.nav_text_color }};
+    --nav-hover: {{ section.settings.nav_hover_color }};
+    --accent: {{ section.settings.accent_color }};
+    --header-h: {{ section.settings.header_height }}px;
   }
 
-  .logo-link {
-    text-decoration: none;
-    display: inline-block;
-    transition: opacity 0.2s ease;
-  }
-
-  .logo-link:hover {
-    opacity: 0.85;
-  }
-
-  /* Text Logo Styles */
-  .logo-text {
-    font-size: {{ section.settings.logo_text_size }}px;
-    font-weight: {{ section.settings.logo_text_weight }};
-    letter-spacing: -0.02em;
-    background: linear-gradient(135deg, #111 0%, #2c2c2c 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-  }
-
-  /* Image Logo Styles */
-  .logo-image {
-    display: flex;
-    align-items: center;
-  }
-
-  .logo-img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-  }
-
-  /* Rest of your existing CSS remains the same */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #fafaf8;
-  }
+  .header-section-wrapper { height: var(--header-h); }
 
   .site-header {
-    background-color: {{ section.settings.header_background }};
+    background-color: var(--header-bg);
     border-bottom: 1px solid #eaeef2;
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 100;
+    left: 0;
     width: 100%;
+    z-index: 1000;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    height: var(--header-h);
   }
 
+  /* Scroll Logic Classes */
+  .site-header.header-hidden { transform: translateY(-100%); }
+  .site-header.header-visible { transform: translateY(0); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
   .nav-container {
-    /* max-width: {{ section.settings.container_width }}px; */
-    padding: 0px 300px;
+    max-width: {{ section.settings.container_width }}px;
     margin: 0 auto;
-    /* padding: 0 32px; */
+    padding: 0 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    min-height: {{ section.settings.header_height }}px;
-    gap: 16px;
+    height: 100%;
+    gap: 20px;
   }
 
-  .main-nav-links {
-    display: flex;
-    align-items: center;
-    gap: 28px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  /* ========== LOGO ========== */
+  .logo-text {
+    font-size: clamp(20px, 5vw, {{ section.settings.logo_text_size }}px);
+    font-weight: {{ section.settings.logo_text_weight }};
+    text-decoration: none;
+    color: #000;
+    white-space: nowrap;
+    display: block;
   }
+  .logo-img { max-height: calc(var(--header-h) - 20px); width: auto; display: block; }
 
+  /* ========== NAVIGATION (DESKTOP) ========== */
+  .main-nav-links { display: flex; list-style: none; gap: 30px; margin: 0; padding: 0; }
   .nav-link {
     text-decoration: none;
     font-weight: 500;
     font-size: {{ section.settings.nav_font_size }}px;
-    color: {{ section.settings.nav_text_color }};
-    padding: 8px 0;
-    display: inline-flex;
+    color: var(--nav-text);
+    display: flex;
     align-items: center;
     gap: 6px;
     transition: color 0.2s;
   }
+  .nav-link:hover { color: var(--nav-hover); }
 
-  .nav-link:hover {
-    color: {{ section.settings.nav_hover_color }};
+  @media (min-width: 992px) {
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      min-width: 220px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: 0.3s;
+      padding: 15px 0;
+      border-radius: 8px;
+      list-style: none;
+    }
+    .nav-item:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-menu a { display: block; padding: 8px 20px; color: #333; text-decoration: none; }
+    .dropdown-menu a:hover { background: #f8f9fa; }
+    .mobile-menu-header, .mobile-search-container, .mobile-only { display: none; }
+    .mobile-menu-toggle { display: none; }
   }
 
-  .nav-link i {
-    font-size: 0.75rem;
-    color: #5a6874;
-    transition: transform 0.2s;
-  }
-
-  .nav-link:hover i {
-    transform: rotate(180deg);
-  }
-
-  .dropdown-menu {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: -16px;
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-    min-width: 220px;
-    padding: 12px 0;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.2s ease;
-    z-index: 200;
-    list-style: none;
-  }
-
-  .nav-item:hover .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .dropdown-menu a {
-    display: block;
-    padding: 10px 24px;
-    font-size: 0.9rem;
-    color: #2c3e4f;
-    text-decoration: none;
-  }
-
-  .dropdown-menu a:hover {
-    background-color: #f5f7f9;
-    color: #000;
-  }
-
-  .search-wrapper {
-    flex: 1;
-    max-width: 380px;
-  }
-
-  .search-form {
-    width: 100%;
-    position: relative;
-  }
-
+  /* ========== SEARCH & ACTIONS ========== */
+  .search-wrapper { flex: 1; max-width: 450px; position: relative; }
   .search-input {
     width: 100%;
-    padding: 10px 18px 10px 42px;
-    border: 1px solid #e2e8f0;
-    border-radius: 60px;
-    font-size: 0.9rem;
-    background-color: #fbfdfe;
+    padding: 10px 15px 10px 45px;
+    border-radius: 25px;
+    border: 1px solid #e5e7eb;
+    background: #f3f4f6;
     outline: none;
   }
+  .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
 
-  .search-input:focus {
-    border-color: {{ section.settings.accent_color }};
-    box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
-  }
-
-  .search-icon {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #8b9eb0;
-  }
-
-  .user-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .action-icon {
-    font-size: 1.3rem;
-    color: {{ section.settings.icon_color }};
-    text-decoration: none;
-    position: relative;
-  }
-
-  .action-icon:hover {
-    color: {{ section.settings.icon_hover_color }};
-  }
-
+  .user-actions { display: flex; gap: 20px; align-items: center; }
+  .action-icon { font-size: 22px; color: {{ section.settings.icon_color }}; position: relative; text-decoration: none; transition: 0.2s; }
+  .action-icon:hover { color: var(--accent); }
   .cart-count {
-    position: absolute;
-    top: -8px;
-    right: -12px;
-    background: {{ section.settings.accent_color }};
-    color: white;
-    font-size: 0.65rem;
-    font-weight: 600;
-    border-radius: 30px;
-    padding: 2px 6px;
-    min-width: 18px;
-    text-align: center;
+    position: absolute; top: -8px; right: -10px;
+    background: var(--accent);
+    color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 20px;
   }
 
-  .mobile-menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 1.6rem;
-    cursor: pointer;
-    color: {{ section.settings.nav_text_color }};
-  }
-
-  @media (max-width: 720px) {
-    .mobile-menu-toggle {
-      display: block;
-    }
+  /* ========== MOBILE STYLES ========== */
+  @media (max-width: 991px) {
+    .desktop-only { display: none; }
+    .mobile-menu-toggle { display: flex; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--nav-text); }
     
-    .main-nav-links {
+    body.menu-open { overflow: hidden; }
+
+    .nav-menu-wrapper {
       position: fixed;
-      top: {{ section.settings.header_height }}px;
-      left: -100%;
-      width: 80%;
-      max-width: 300px;
-      height: calc(100vh - {{ section.settings.header_height }}px);
-      background: white;
+      top: 0; left: -100%;
+      width: 100%; max-width: 320px; height: 100vh;
+      background: #fff;
+      padding: 20px;
+      transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 10px 0 20px rgba(0,0,0,0.1);
+      z-index: 2000;
+      display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      padding: 32px 24px;
-      gap: 24px;
-      transition: left 0.3s;
-      z-index: 1000;
-      border-right: 1px solid #eee;
+      overflow-y: auto;
     }
+
+    .nav-menu-wrapper.active { left: 0; }
+    .mobile-menu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .mobile-menu-title { font-weight: 700; font-size: 20px; }
+    .close-menu { background: none; border: none; font-size: 20px; cursor: pointer; }
     
-    .main-nav-links.active {
-      left: 0;
-    }
+    .mobile-search-container { margin-bottom: 25px; position: relative; }
+    .mobile-search-container .search-input { padding: 12px 15px; width: 100%; background: #f9fafb; border: 1px solid #eee; }
+    .search-submit { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #999; }
+
+    .main-nav-links { flex-direction: column; gap: 0; }
+    .nav-item { border-bottom: 1px solid #f3f4f6; }
+    .nav-link { padding: 15px 0; justify-content: space-between; width: 100%; }
     
-    .search-wrapper {
-      order: 3;
-      width: 100%;
-      max-width: 100%;
-      margin-top: 12px;
-    }
+    .dropdown-menu { display: none; padding: 0 0 15px 15px; list-style: none; }
+    .nav-item.open-mobile .dropdown-menu { display: block; }
+    .nav-item.open-mobile .dropdown-icon { transform: rotate(180deg); }
   }
 </style>
 
 <script>
-  (function() {
-    const toggleBtn = document.getElementById('mobileMenuToggle');
-    const navMenu = document.getElementById('mainNavMenu');
-    
-    if (toggleBtn && navMenu) {
-      toggleBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        navMenu.classList.toggle('active');
-        
-        const icon = toggleBtn.querySelector('i');
-        if (navMenu.classList.contains('active')) {
-          icon.classList.remove('fa-bars');
-          icon.classList.add('fa-times');
+  document.addEventListener('DOMContentLoaded', function() {
+    const header = document.getElementById('siteHeader');
+    const toggle = document.getElementById('mobileMenuToggle');
+    const closeBtn = document.getElementById('closeMenu');
+    const menu = document.getElementById('mainNavMenu');
+    const body = document.body;
+
+    let lastScrollY = window.scrollY;
+
+    // --- SCROLL HIDE/SHOW ---
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      if (menu.classList.contains('active')) return;
+
+      if (currentScrollY > lastScrollY && currentScrollY > 150) {
+        header.classList.add('header-hidden');
+      } else {
+        header.classList.remove('header-hidden');
+        if (currentScrollY > 50) {
+          header.classList.add('header-visible');
         } else {
-          icon.classList.remove('fa-times');
-          icon.classList.add('fa-bars');
-        }
-      });
-
-      // Handle mobile menu link clicks
-      const allMobileLinks = navMenu.querySelectorAll('a');
-      allMobileLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-          if (window.innerWidth <= 720) {
-            const parentItem = link.closest('.has-dropdown');
-            
-            if (parentItem && link.closest('.dropdown-menu') === null) {
-              e.preventDefault();
-              parentItem.classList.toggle('open-mobile');
-              return;
-            }
-            
-            if (link.getAttribute('href') && link.getAttribute('href') !== '#') {
-              setTimeout(() => {
-                navMenu.classList.remove('active');
-                const iconBtn = toggleBtn.querySelector('i');
-                if (iconBtn) {
-                  iconBtn.classList.remove('fa-times');
-                  iconBtn.classList.add('fa-bars');
-                }
-              }, 100);
-            }
-          }
-        });
-      });
-    }
-
-    function handleResize() {
-      if (window.innerWidth > 720) {
-        if (navMenu) navMenu.classList.remove('active');
-        document.querySelectorAll('.has-dropdown.open-mobile').forEach(el => {
-          el.classList.remove('open-mobile');
-        });
-        if (toggleBtn) {
-          const icon = toggleBtn.querySelector('i');
-          if (icon && icon.classList.contains('fa-times')) {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-          }
+          header.classList.remove('header-visible');
         }
       }
-    }
+      lastScrollY = currentScrollY;
+    }, { passive: true });
 
-    window.addEventListener('resize', handleResize);
-    handleResize();
-  })();
+    // --- MOBILE MENU TOGGLES ---
+    const openMenu = () => {
+      menu.classList.add('active');
+      body.classList.add('menu-open');
+    };
+
+    const closeMenu = () => {
+      menu.classList.remove('active');
+      body.classList.remove('menu-open');
+    };
+
+    if (toggle) toggle.addEventListener('click', openMenu);
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+
+    // Close on backdrop click
+    document.addEventListener('click', (e) => {
+      if (menu.classList.contains('active') && !menu.contains(e.target) && !toggle.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
+    // Mobile Dropdowns (Accordion Style)
+    const dropdownLinks = document.querySelectorAll('.has-dropdown > .nav-link');
+    dropdownLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (window.innerWidth < 992) {
+          e.preventDefault();
+          const parent = link.parentElement;
+          parent.classList.toggle('open-mobile');
+        }
+      });
+    });
+  });
 </script>
+
 {% schema %}
 {
   "name": "Header",
-  "class": "site-header-section",
   "settings": [
     {
       "type": "header",
@@ -420,8 +320,7 @@
     {
       "type": "image_picker",
       "id": "logo",
-      "label": "Logo image",
-      "info": "Recommended size: 200x60px. Leave empty to use text logo."
+      "label": "Logo image"
     },
     {
       "type": "range",
@@ -437,8 +336,7 @@
       "type": "text",
       "id": "logo_text",
       "label": "Logo text (fallback)",
-      "default": "SHOP.CO",
-      "info": "Used when no logo image is uploaded"
+      "default": "SHOP.CO"
     },
     {
       "type": "range",
@@ -536,12 +434,6 @@
     },
     {
       "type": "color",
-      "id": "icon_hover_color",
-      "label": "Icon hover color",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
       "id": "accent_color",
       "label": "Accent color",
       "default": "#000000"
@@ -549,8 +441,7 @@
   ],
   "presets": [
     {
-      "name": "Default Header",
-      "category": "Navigation"
+      "name": "Full Responsive Header"
     }
   ]
 }
