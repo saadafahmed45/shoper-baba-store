@@ -7,45 +7,76 @@
       </div>
     {% endif %}
 
-    <div class="feature_products_grid">
-      {% for product in collections[section.settings.collection].products limit: section.settings.product_limit %}
-        <div class="feature_product_item">
-          <a href="{{ product.url }}">
-            <div class="product_image_wrapper">
-              <img 
-                src="{{ product.featured_image | image_url: width: 600 }}" 
-                alt="{{ product.title | escape }}"
-                loading="lazy"
-              >
+    {% if section.settings.collection != blank %}
+      {% assign selected_collection = collections[section.settings.collection] %}
+
+      {% if selected_collection.products_count > 0 %}
+        <div class="feature_products_grid">
+
+          {% for product in selected_collection.products limit: section.settings.product_limit %}
+            <div class="feature_product_item">
+              <a href="{{ product.url }}">
+
+                <!-- Image -->
+                <div class="product_image_wrapper">
+                  {% if product.featured_image %}
+                    <img 
+                      src="{{ product.featured_image | image_url: width: 600 }}" 
+                      alt="{{ product.title | escape }}"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <img 
+                      src="https://via.placeholder.com/600x600?text=No+Image"
+                      alt="No image"
+                    >
+                  {% endif %}
+                </div>
+
+                <!-- Content -->
+                <div class="products_content text-{{ section.settings.products_align }}">
+                  <h3 class="products_title">
+                    {{ product.title | truncate: 40 }}
+                  </h3>
+
+                  <!-- Rating -->
+                  <div class="rating_icon">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                  </div>
+
+                  <!-- Price -->
+                  <p class="products_price">
+                    {{ product.price | money_without_trailing_zeros }}
+                  </p>
+                </div>
+
+              </a>
             </div>
+          {% endfor %}
 
-            <div class="products_content">
-              <h3 class="products_title">{{ product.title }}</h3>
-
-              <div class="rating_icon">
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-              </div>
-
-              <p class="products_price">
-                {{ product.price | money_without_trailing_zeros }}
-              </p>
-            </div>
-          </a>
         </div>
-      {% endfor %}
-    </div>
 
-    {% if section.settings.show_view_all %}
+      {% else %}
+        <p class="text-center">No products found in this collection.</p>
+      {% endif %}
+
+    {% else %}
+      <p class="text-center">Please select a collection.</p>
+    {% endif %}
+
+    <!-- View All -->
+    {% if section.settings.show_view_all and section.settings.collection != blank %}
       <div class="see_all_products text-center">
         <a href="{{ collections[section.settings.collection].url }}" class="btn btn-outline-dark">
           View All
         </a>
       </div>
     {% endif %}
+
   </div>
 </div>
 

@@ -5,7 +5,9 @@
       <!-- Content -->
       <div class="hero_content">
         <div class="hero_badge">New Collection 2024</div>
+
         <h1>FIND CLOTHES THAT MATCHES YOUR STYLE</h1>
+
         <p>
           Browse through our diverse range of meticulously crafted garments,
           designed to bring out your individuality and cater to your sense of style.
@@ -21,12 +23,16 @@
             <h2>200+</h2>
             <span>International Brands</span>
           </div>
+
           <div class="divider"></div>
+
           <div class="counter">
             <h2>2,000+</h2>
             <span>Happy Customers</span>
           </div>
+
           <div class="divider"></div>
+
           <div class="counter">
             <h2>30+</h2>
             <span>Countries Served</span>
@@ -36,16 +42,18 @@
 
       <!-- Image -->
       <div class="hero_img">
-        {% if section.settings.hero_img != blank %}
+
+        {% if section.settings.hero_img %}
           <img 
-            src="{{ section.settings.hero_img | img_url: 'master' }}" 
+            src="{{ section.settings.hero_img | image_url: width: 1200 }}" 
             alt="{{ section.settings.hero_img_alt | default: 'Hero image' }}"
             loading="eager"
           >
         {% else %}
           <div class="hero_placeholder">
             <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
               <polyline points="21 15 16 10 5 21"/>
             </svg>
             <p>Upload hero image</p>
@@ -56,9 +64,11 @@
         <div class="float_tag float_tag--top">
           <span class="dot"></span> New Arrivals
         </div>
+
         <div class="float_tag float_tag--bottom">
           ⭐ 4.9 Rating
         </div>
+
       </div>
 
     </div>
@@ -66,11 +76,6 @@
 </div>
 
 <style>
-/* ========================
-   IMPORTS & TOKENS
-======================== */
-/* @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Manrope:wght@400;500;600&display=swap'); */
-
 :root {
   --hero-bg: {{ section.settings.hero_bg_color | default: '#FAF8F5' }};
   --text-dark: #0f0f0f;
@@ -86,9 +91,6 @@
   --container: {{ section.settings.container_width | default: 1200 }}px;
 }
 
-/* ========================
-   BASE SECTION
-======================== */
 .hero_section {
   background-color: var(--hero-bg);
   padding: 80px 0 60px;
@@ -108,9 +110,6 @@
   pointer-events: none;
 }
 
-/* ========================
-   CONTAINER
-======================== */
 .my_container {
   max-width: var(--container);
   margin: 0 auto;
@@ -118,9 +117,6 @@
   box-sizing: border-box;
 }
 
-/* ========================
-   LAYOUT
-======================== */
 .wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -128,16 +124,12 @@
   gap: 60px;
 }
 
-/* ========================
-   CONTENT SIDE
-======================== */
 .hero_content {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-/* Badge */
 .hero_badge {
   display: inline-flex;
   align-items: center;
@@ -153,21 +145,17 @@
   padding: 6px 16px;
   border-radius: var(--radius-pill);
   width: fit-content;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-/* Heading */
 .hero_content h1 {
   font-family: var(--font-display);
   font-size: clamp(32px, 4.5vw, 58px);
   font-weight: 800;
   line-height: 1.1;
-  letter-spacing: -0.02em;
   color: var(--text-dark);
   margin: 0;
 }
 
-/* Paragraph */
 .hero_content p {
   font-family: var(--font-body);
   font-size: clamp(15px, 1.2vw, 18px);
@@ -177,119 +165,77 @@
   max-width: 480px;
 }
 
-/* ========================
-   BUTTONS
-======================== */
 .hero_actions {
   display: flex;
-  align-items: center;
   gap: 16px;
   flex-wrap: wrap;
 }
 
 .btn-dark {
-  font-family: var(--font-body);
-  font-size: 15px;
-  font-weight: 600;
   background: var(--text-dark);
-  color: white;
+  color: #fff;
   padding: 14px 36px;
   border-radius: var(--radius-pill);
-  border: 2px solid transparent;
+  border: none;
   cursor: pointer;
-  transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
-  white-space: nowrap;
+  transition: 0.3s;
 }
 
 .btn-dark:hover {
   background: var(--accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 }
 
 .btn-outline {
-  font-family: var(--font-body);
-  font-size: 15px;
-  font-weight: 600;
   background: transparent;
-  color: var(--text-dark);
+  border: 2px solid var(--border);
   padding: 14px 36px;
   border-radius: var(--radius-pill);
-  border: 2px solid var(--border);
   cursor: pointer;
-  transition: border-color 0.25s, background 0.25s, transform 0.2s;
-  white-space: nowrap;
+  transition: 0.3s;
 }
 
 .btn-outline:hover {
   border-color: var(--text-dark);
-  background: rgba(0,0,0,0.04);
-  transform: translateY(-2px);
 }
 
-/* ========================
-   COUNTER STRIP
-======================== */
 .counter_sec {
   display: flex;
-  align-items: center;
-  gap: 0;
-  padding: 24px 0 0;
   border-top: 1px solid var(--border);
-  flex-wrap: wrap;
-  row-gap: 20px;
+  padding-top: 24px;
 }
 
 .counter {
-  flex: 1 1 auto;
-  min-width: 100px;
+  flex: 1;
 }
 
 .counter h2 {
-  font-family: var(--font-display);
-  font-size: clamp(24px, 2.5vw, 36px);
-  font-weight: 800;
-  color: var(--text-dark);
-  margin: 0 0 4px;
-  letter-spacing: -0.02em;
+  font-size: 28px;
+  margin: 0;
 }
 
 .counter span {
-  font-family: var(--font-body);
   font-size: 13px;
   color: var(--text-light);
-  font-weight: 500;
 }
 
 .divider {
   width: 1px;
-  height: 44px;
   background: var(--border);
-  margin: 0 28px;
-  flex-shrink: 0;
+  margin: 0 20px;
 }
 
-/* ========================
-   IMAGE SIDE
-======================== */
 .hero_img {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .hero_img img {
   width: 100%;
   max-width: 520px;
-  height: auto;
   border-radius: var(--radius-card);
-  display: block;
-  object-fit: cover;
   box-shadow: 0 24px 60px rgba(0,0,0,0.12);
 }
 
-/* Placeholder */
 .hero_placeholder {
   width: 100%;
   max-width: 520px;
@@ -300,81 +246,34 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  color: #aaa;
-  font-family: var(--font-body);
-  font-size: 14px;
 }
 
-/* ========================
-   FLOATING TAGS
-======================== */
 .float_tag {
   position: absolute;
   background: white;
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   padding: 10px 18px;
-  font-family: var(--font-body);
   font-size: 13px;
-  font-weight: 600;
-  color: var(--text-dark);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
   animation: floatY 4s ease-in-out infinite;
 }
 
 .float_tag--top {
   top: 12%;
-  left: -16px;
-  animation-delay: 0s;
+  left: -10px;
 }
 
 .float_tag--bottom {
   bottom: 12%;
-  right: -16px;
-  animation-delay: 2s;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  background: #22c55e;
-  border-radius: 50%;
-  flex-shrink: 0;
-  animation: pulse 2s ease-in-out infinite;
+  right: -10px;
 }
 
 @keyframes floatY {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-8px); }
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
-  50%       { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
-}
-
-/* ========================
-   TABLET  (≤1024px)
-======================== */
-@media (max-width: 1024px) {
-  .wrapper {
-    gap: 40px;
-  }
-
-  .float_tag--top  { left: -8px; }
-  .float_tag--bottom { right: -8px; }
-
-  .divider { margin: 0 20px; }
-}
-
-/* ========================
-   LARGE TABLET  (≤900px)
-======================== */
+/* Responsive */
 @media (max-width: 900px) {
   .wrapper {
     grid-template-columns: 1fr;
@@ -382,100 +281,11 @@
   }
 
   .hero_content {
-    order: 2;
     align-items: center;
-  }
-
-  .hero_img {
-    order: 1;
-  }
-
-  .hero_content p {
-    max-width: 560px;
   }
 
   .counter_sec {
     justify-content: center;
-  }
-
-  .float_tag--top  { top: 6%; left: 4%; }
-  .float_tag--bottom { bottom: 6%; right: 4%; }
-}
-
-/* ========================
-   MOBILE  (≤600px)
-======================== */
-@media (max-width: 600px) {
-  .hero_section {
-    padding: 48px 0 40px;
-  }
-
-  .my_container {
-    padding: 0 16px;
-  }
-
-  .wrapper {
-    gap: 32px;
-  }
-
-  .hero_actions {
-    justify-content: center;
-    gap: 12px;
-  }
-
-  .btn-dark,
-  .btn-outline {
-    padding: 13px 28px;
-    font-size: 14px;
-  }
-
-  .divider {
-    display: none;
-  }
-
-  .counter_sec {
-    justify-content: space-around;
-    gap: 16px;
-    padding-top: 20px;
-  }
-
-  .counter {
-    min-width: 80px;
-    text-align: center;
-  }
-
-  .float_tag {
-    font-size: 12px;
-    padding: 8px 14px;
-  }
-
-  .float_tag--top  { top: 4%; left: 2%; }
-  .float_tag--bottom { bottom: 4%; right: 2%; }
-}
-
-/* ========================
-   SMALL MOBILE  (≤400px)
-======================== */
-@media (max-width: 400px) {
-  .hero_actions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .btn-dark,
-  .btn-outline {
-    width: 100%;
-    text-align: center;
-  }
-
-  .float_tag {
-    display: none;
-  }
-
-  .counter_sec {
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
   }
 }
 </style>

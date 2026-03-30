@@ -178,3 +178,13 @@ background: #fff;
 .feature_product_item a {
   height: 100%;
 }
+
+.products_content.text-left {
+  text-align: left;
+}
+.products_content.text-center {
+  text-align: center;
+}
+.products_content.text-right {
+  text-align: right;
+}

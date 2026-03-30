@@ -1,0 +1,172 @@
+<div class="dress_main_section">
+    <div class="container">
+<section class="dress_style_section p-5">
+
+    <!-- Title -->
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-uppercase">
+        {{ section.settings.title | default: "Browse By Dress Style" }}
+      </h2>
+    </div>
+
+    <!-- Grid -->
+    <div class="row g-3 mt-3">
+
+      <!-- Casual -->
+      <div class="col-md-6">
+        <a href="{{ section.settings.casual_link }}" class="style_card">
+          <img src="{{ section.settings.casual_img | image_url: width: 800 }}" alt="Casual">
+          <div class="style_text">Casual</div>
+        </a>
+      </div>
+
+      <!-- Formal -->
+      <div class="col-md-6">
+        <a href="{{ section.settings.formal_link }}" class="style_card">
+          <img src="{{ section.settings.formal_img | image_url: width: 800 }}" alt="Formal">
+          <div class="style_text">Formal</div>
+        </a>
+      </div>
+
+      <!-- Party -->
+      <div class="col-md-6">
+        <a href="{{ section.settings.party_link }}" class="style_card">
+          <img src="{{ section.settings.party_img | image_url: width: 800 }}" alt="Party">
+          <div class="style_text">Party</div>
+        </a>
+      </div>
+
+      <!-- Gym -->
+      <div class="col-md-6">
+        <a href="{{ section.settings.gym_link }}" class="style_card">
+          <img src="{{ section.settings.gym_img | image_url: width: 800 }}" alt="Gym">
+          <div class="style_text">Gym</div>
+        </a>
+      </div>
+
+    </div>
+    </section>
+  </div>
+</div>
+
+<style>
+    .dress_main_section{
+        padding: 100px 0;
+    }
+.dress_style_section {
+  background: #f1f1f1;
+  border-radius: 25px;
+}
+
+/* Card */
+.style_card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #fff;
+  height: 220px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+  text-decoration: none;
+}
+
+/* Hover */
+.style_card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* Image */
+.style_card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Text */
+.style_text {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  background: rgba(255,255,255,0.8);
+  padding: 5px 12px;
+  border-radius: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .style_card {
+    height: 180px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Dress Style Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Browse By Dress Style"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "casual_img",
+      "label": "Casual Image"
+    },
+    {
+      "type": "url",
+      "id": "casual_link",
+      "label": "Casual Link"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "formal_img",
+      "label": "Formal Image"
+    },
+    {
+      "type": "url",
+      "id": "formal_link",
+      "label": "Formal Link"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "party_img",
+      "label": "Party Image"
+    },
+    {
+      "type": "url",
+      "id": "party_link",
+      "label": "Party Link"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "gym_img",
+      "label": "Gym Image"
+    },
+    {
+      "type": "url",
+      "id": "gym_link",
+      "label": "Gym Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dress Style Section",
+        "category": "Collection"
+
+    }
+  ]
+}
+{% endschema %}
