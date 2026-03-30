@@ -1,0 +1,90 @@
+<div class="feature_products py-5">
+  <div class="container">
+
+    {% if product.collections.size > 0 %}
+      {% assign collection = product.collections.first %}
+
+      {% if section.settings.title != blank %}
+        <div class="feature_products_title text-center">
+          <h2>{{ section.settings.title }}</h2>
+        </div>
+      {% endif %}
+
+      <div class="feature_products_grid">
+
+        {% for related_product in collection.products limit: section.settings.product_limit %}
+          {% if related_product.id != product.id %}
+
+            <div class="feature_product_item">
+              <a href="{{ related_product.url }}">
+
+                <!-- Image -->
+                <div class="product_image_wrapper">
+                  <img 
+                    src="{{ related_product.featured_image | image_url: width: 600 }}"
+                    alt="{{ related_product.title | escape }}"
+                    loading="lazy"
+                  >
+                </div>
+
+                <!-- Content -->
+                <div class="products_content">
+                  <h3 class="products_title">
+                    {{ related_product.title }}
+                  </h3>
+
+                  <!-- Static Rating -->
+                  <div class="rating_icon">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                  </div>
+
+                  <!-- Price -->
+                  <p class="products_price">
+                    {{ related_product.price | money_without_trailing_zeros }}
+                  </p>
+                </div>
+
+              </a>
+            </div>
+
+          {% endif %}
+        {% endfor %}
+
+      </div>
+
+    {% endif %}
+
+  </div>
+</div>
+{% schema %}
+{
+"name": "Related Products",
+"tag": "section",
+"settings": [
+{
+"type": "header",
+"content": "Related Products"
+},
+{
+"type": "text",
+"id": "title",
+"label": "Section Title",
+"default": "You might also like"
+}
+
+
+],
+"presets": [
+{
+"name": "Related Products",
+"category": "Products sections",
+"settings": {
+}
+}
+]
+}
+{% endschema %}

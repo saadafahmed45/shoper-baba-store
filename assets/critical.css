@@ -22,3 +22,159 @@ background: #fff;
 
 
 /* header nav end  */
+
+
+/* feature products card  */
+/* Section Spacing */
+.feature_products {
+  padding: 60px 0;
+  background-color: #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.feature_products_title h2 {
+  font-size: clamp(32px, 5vw, 48px); /* Responsive font size */
+  margin-bottom: 40px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+/* ========== GRID LAYOUT ========== */
+.feature_products_grid {
+  display: grid;
+  /* 4 columns on desktop by default */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px 20px; /* Vertical gap, Horizontal gap */
+}
+
+.feature_product_item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 20px;
+  background: #fff;
+  height: 100%;
+}
+
+.feature_product_item a {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.feature_product_item:hover {
+  transform: translateY(-5px);
+}
+
+/* Image Handling */
+.product_image_wrapper {
+  aspect-ratio: 1 / 1; /* Keeps images square */
+  overflow: hidden;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  background-color: #F0F0F0;
+}
+
+.product_image_wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.feature_product_item:hover img {
+  transform: scale(1.05);
+}
+
+/* Content */
+.products_content {
+  text-align: {{ section.settings.products_align }};
+  padding: 0 5px;
+}
+
+.products_title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.rating_icon {
+  color: #ffc634;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.products_price {
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
+
+.see_all_products {
+  margin-top: 50px;
+}
+
+.btn-outline-dark {
+  padding: 12px 50px;
+  border-radius: 50px;
+  text-transform: capitalize;
+  font-weight: 500;
+  border: 1px solid #000;
+  color: #000;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.btn-outline-dark:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* ========== RESPONSIVE GRID ========== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .feature_products_grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Large Phones */
+@media (max-width: 768px) {
+  .feature_products_grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  .feature_products {
+    padding: 40px 0;
+  }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+  .feature_products_grid {
+    /* Set to 1 if you want huge items, or 2 if you want a compact shop look */
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .product_image_wrapper {
+    margin-bottom: 10px;
+  }
+} 
+/* end  */
+
+.feature_product_item {
+  overflow: hidden;
+}
+
+.feature_product_item a {
+  height: 100%;
+}
