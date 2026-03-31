@@ -12,9 +12,17 @@
     "main": {
       "type": "product",
       "settings": {}
+    },
+    "releted_products_zzRUJW": {
+      "type": "releted-products",
+      "name": "Related Products",
+      "settings": {
+        "title": "You might also like"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "releted_products_zzRUJW"
   ]
 }

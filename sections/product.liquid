@@ -22,13 +22,13 @@
             </a>
           </li>
 
-          {% if collection %}
+          {% comment %} {% if collection %}
           <li class="breadcrumb-item">
             <a href="{{ collection.url }}">
               {{ collection.title }}
             </a>
           </li>
-          {% endif %}
+          {% endif %} {% endcomment %}
 
           <li class="breadcrumb-item active">
             <i class="fa-solid fa-shirt me-1"></i> {{ product.title }}

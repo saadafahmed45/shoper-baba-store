@@ -69,6 +69,7 @@
         "title": "{{ section.settings.collection.title }}",
         "collection": "new-arrivals",
         "product_limit": 4,
+        "show_view_all": true,
         "products_align": "center"
       }
     },
@@ -79,7 +80,23 @@
         "title": "{{ section.settings.collection.title }}",
         "collection": "top-selling",
         "product_limit": 4,
+        "show_view_all": true,
         "products_align": "center"
+      }
+    },
+    "dress_style_section_eRVJxD": {
+      "type": "dress_style_section",
+      "name": "Dress Style Section",
+      "settings": {
+        "title": "Browse By Dress Style",
+        "casual_img": "shopify://shop_images/image_11.png",
+        "casual_link": "",
+        "formal_img": "shopify://shop_images/image_13.png",
+        "formal_link": "",
+        "party_img": "shopify://shop_images/image_12.png",
+        "party_link": "",
+        "gym_img": "shopify://shop_images/image_14.png",
+        "gym_link": ""
       }
     }
   },
@@ -87,6 +104,7 @@
     "main",
     "brand_icons_KHfYrn",
     "feature_products_zAAfcJ",
-    "feature_products_TLPe3T"
+    "feature_products_TLPe3T",
+    "dress_style_section_eRVJxD"
   ]
 }

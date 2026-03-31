@@ -1,96 +1,108 @@
 <div class="cart_page py-5">
   <div class="container">
 
-    <h2 class="fw-bold mb-4">🛒 Your Cart</h2>
+    <!-- Title -->
+    <h2 class="cart-title mb-4">YOUR CART</h2>
 
     {% if cart.item_count > 0 %}
-      <form action="{{ routes.cart_url }}" method="post">
+    <form action="{{ routes.cart_url }}" method="post">
 
-        <div class="row g-4">
+      <div class="row g-4">
 
-          <!-- LEFT: CART ITEMS -->
-          <div class="col-lg-8">
+        <!-- LEFT -->
+        <div class="col-lg-8">
 
-            {% for item in cart.items %}
-              <div class="card mb-3 cart-card shadow-sm border-0">
-                <div class="row g-0 align-items-center p-3">
+          {% for item in cart.items %}
+          <div class="cart-item">
 
-                  <!-- Image -->
-                  <div class="col-md-3 text-center">
-                    <img src="{{ item.image | img_url: '300x' }}" class="img-fluid rounded">
-                  </div>
+            <div class="cart-left">
+              <img src="{{ item.image | img_url: '300x' }}" alt="">
+            </div>
 
-                  <!-- Info -->
-                  <div class="col-md-5 ml-3 mx-3">
-                    <h5 class="fw-semibold">{{ item.product.title }}</h5>
-                    <p class="text-muted mb-1">{{ item.variant.title }}</p>
-                    <p class="fw-bold">{{ item.final_price | money }}</p>
+            <div class="cart-middle">
+              <h6>{{ item.product.title }}</h6>
+              <p class="meta">{{ item.variant.title }}</p>
+              <p class="price">{{ item.final_price | money }}</p>
+            </div>
 
-                    <a href="{{ item.url_to_remove }}" class="text-danger small">
-                      Remove
-                    </a>
-                  </div>
+            <div class="cart-right">
 
-                  <!-- Quantity -->
-                  <div class="col-md-2 text-center">
-                    <div class="qty-box d-flex justify-content-center align-items-center">
-                      <button type="button" onclick="decreaseQty({{ forloop.index0 }})">-</button>
+              <!-- Qty -->
+              <div class="qty-box">
+                <button type="button" onclick="decreaseQty({{ forloop.index0 }})">-</button>
 
-                      <input 
-                        type="number" 
-                        name="updates[]" 
-                        id="qty-{{ forloop.index0 }}"
-                        value="{{ item.quantity }}" 
-                        min="1"
-                      >
+                <input 
+                  type="number" 
+                  name="updates[]" 
+                  id="qty-{{ forloop.index0 }}"
+                  value="{{ item.quantity }}" 
+                  min="1"
+                >
 
-                      <button type="button" onclick="increaseQty({{ forloop.index0 }})">+</button>
-                    </div>
-                  </div>
-
-                  <!-- Total -->
-                  <div class="col-md-2 text-end">
-                    <p class="fw-bold">{{ item.final_line_price | money }}</p>
-                  </div>
-
-                </div>
-              </div>
-            {% endfor %}
-
-          </div>
-
-          <!-- RIGHT: SUMMARY -->
-          <div class="col-lg-4">
-            <div class="card shadow-sm p-4 border-0 summary-box">
-
-              <h5 class="fw-bold mb-3">Order Summary</h5>
-
-              <div class="d-flex justify-content-between mb-2">
-                <span>Subtotal</span>
-                <span>{{ cart.total_price | money }}</span>
+                <button type="button" onclick="increaseQty({{ forloop.index0 }})">+</button>
               </div>
 
-              <hr>
-
-              <button type="submit" name="update" class="btn btn-outline-dark w-100 mb-2">
-                Update Cart
-              </button>
-
-              <button type="submit" name="checkout" class="btn btn-dark w-100">
-                Checkout
-              </button>
+              <!-- Remove -->
+              <a href="{{ item.url_to_remove }}" class="remove-btn">🗑</a>
 
             </div>
+
           </div>
+          {% endfor %}
 
         </div>
 
-      </form>
+        <!-- RIGHT SUMMARY -->
+        <div class="col-lg-4">
+          <div class="summary-box">
+
+            <h5>Order Summary</h5>
+
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span>{{ cart.total_price | money }}</span>
+            </div>
+
+            <div class="summary-row discount">
+              <span>Discount (-20%)</span>
+              <span>-{{ cart.total_price | times: 0.2 | money }}</span>
+            </div>
+
+            <div class="summary-row">
+              <span>Delivery Fee</span>
+              <span>$15</span>
+            </div>
+
+            <hr>
+
+            <div class="summary-total">
+              <span>Total</span>
+              <span>
+                {{ cart.total_price | minus: cart.total_price | times: 0.2 | plus: 1500 | money }}
+              </span>
+            </div>
+
+            <!-- Promo -->
+            <div class="promo-box">
+              <input type="text" placeholder="Add promo code">
+              <button>Apply</button>
+            </div>
+
+            <!-- Checkout -->
+            <button type="submit" name="checkout" class="checkout-btn">
+              Go to Checkout →
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+
+    </form>
 
     {% else %}
       <div class="text-center py-5">
-        <h4>Your cart is empty 😢</h4>
-        <a href="/" class="btn btn-dark mt-3">Continue Shopping</a>
+        <h4>Your cart is empty</h4>
       </div>
     {% endif %}
 
@@ -98,22 +110,57 @@
 </div>
 
 <style>
-.cart-card {
+.cart-title {
+  font-weight: 800;
+  font-size: 28px;
+}
+
+/* Cart Item */
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f6f6f6;
+  padding: 20px;
   border-radius: 15px;
-  transition: 0.3s;
+  margin-bottom: 15px;
 }
 
-.cart-card:hover {
-  transform: translateY(-3px);
+.cart-left img {
+  width: 80px;
+  border-radius: 10px;
 }
 
-.summary-box {
-  border-radius: 15px;
+.cart-middle {
+  flex: 1;
+  margin-left: 15px;
 }
 
-/* Quantity box */
+.cart-middle h6 {
+  font-weight: 600;
+}
+
+.meta {
+  font-size: 13px;
+  color: #777;
+}
+
+.price {
+  font-weight: bold;
+}
+
+/* Right */
+.cart-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Qty */
 .qty-box {
-  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  background: #eee;
   border-radius: 30px;
   padding: 5px 10px;
 }
@@ -127,22 +174,79 @@
 
 .qty-box input {
   width: 40px;
-  border: none;
   text-align: center;
+  border: none;
   background: transparent;
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .cart-card .row {
-    text-align: center;
-  }
-
-  .col-md-2,
-  .col-md-5 {
-    margin-top: 10px;
-  }
+/* Remove */
+.remove-btn {
+  color: red;
+  font-size: 18px;
+  text-decoration: none;
 }
+
+/* Summary */
+.summary-box {
+  background: #f6f6f6;
+  padding: 25px;
+  border-radius: 15px;
+}
+
+.summary-box h5 {
+  margin-bottom: 20px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.discount span:last-child {
+  color: red;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+/* Promo */
+.promo-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.promo-box input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 20px;
+  border: none;
+}
+
+.promo-box button {
+  background: black;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+}
+
+/* Checkout */
+.checkout-btn {
+  width: 100%;
+  background: black;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 30px;
+  font-weight: 600;
+}
+
 </style>
 <script>
 function increaseQty(index) {

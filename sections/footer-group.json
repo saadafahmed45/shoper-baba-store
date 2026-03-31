@@ -14,8 +14,20 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
+        "about_title": "About Us",
+        "about_text": "Write about your company here...",
+        "menu1_title": "Company",
+        "menu1": "company-menu",
+        "menu2_title": "Services",
+        "menu2": "help-menu",
+        "contact_title": "Contact Info",
+        "address": "Dhaka, Bangladesh",
+        "phone": "+880123456789",
+        "email": "example@gmail.com",
+        "facebook": "https://www.linkedin.com/in/mohammadh-/",
+        "twitter": "https://www.linkedin.com/in/mohammadh-/",
+        "instagram": "https://www.linkedin.com/in/mohammadh-/",
+        "linkedin": "https://www.linkedin.com/in/mohammadh-/"
       }
     }
   },
