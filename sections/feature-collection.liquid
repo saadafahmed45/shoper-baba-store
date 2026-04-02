@@ -1,0 +1,190 @@
+<div class="feature_collection">
+  <div class="container">
+
+    <div class="row">
+      <div class="col-12 mb-4 text-center">
+        <h2 class="feature-title">{{ section.settings.feature_title }}</h2>
+        <p class="feature-subtitle">{{ section.settings.feature_subtitle }}</p>
+      </div>
+    </div>
+
+    <div class="row">
+
+      {% for block in section.blocks %}
+        {% assign collection = block.settings.collection %}
+
+        {% if collection != blank %}
+          <div class="col-md-4 mb-4">
+
+            <a href="{{ collection.url }}" class="feature-card">
+
+              <div class="feature-image">
+                
+                {% if collection.featured_image %}
+                  <img 
+                    src="{{ collection.featured_image | image_url: width: 500 }}" 
+                    alt="{{ collection.title }}"
+                  >
+                {% else %}
+                  <img 
+                    src="https://via.placeholder.com/500x300" 
+                    alt="No Image"
+                  >
+                {% endif %}
+
+                <!-- Overlay -->
+                <div class="overlay"></div>
+
+                <!-- Content -->
+                <div class="feature-content text-center">
+                  <h4>{{ collection.title }}</h4>
+                  <span>{{ collection.products_count }} Products</span>
+                </div>
+
+              </div>
+
+            </a>
+
+          </div>
+        {% endif %}
+      {% endfor %}
+
+    </div>
+
+  </div>
+</div>
+
+<style>
+.feature_collection {
+    background: #f8f8f8;
+    padding: 100px 0;
+}
+
+.feature-title {
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.feature-subtitle {
+    color: #777;
+    font-size: 14px;
+}
+
+/* Card */
+.feature-card {
+    display: block;
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    transition: 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Image */
+.feature-image {
+    position: relative;
+}
+
+.feature-image img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+/* Overlay */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.feature-card:hover .overlay {
+    opacity: 1;
+}
+
+/* Content */
+.feature-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    color: #fff;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.feature-card:hover .feature-content {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.feature-content h4 {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.feature-content span {
+    font-size: 14px;
+    color: #ddd;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .feature-title {
+        font-size: 28px;
+    }
+
+    .feature-content h4 {
+        font-size: 18px;
+    }
+
+    .feature-content span {
+        font-size: 12px;
+    }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Feature Collection",
+  "settings": [
+    {
+        "type": "text",
+        "id": "feature_title",
+        "label": "Title",
+        "default": "Featured Collection"
+        },
+        {
+        "type": "text",
+        "id": "feature_subtitle",
+        "label": "Subtitle",
+        "default": "Check out our latest collection of products."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature Collection"
+    }
+  ]
+}
+{% endschema %}
