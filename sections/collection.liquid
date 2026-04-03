@@ -1,129 +1,121 @@
+ {{ "collection-filter.js" | asset_url | script_tag }}
+
 <div class="collection_sec">
-{% paginate collection.products by 9 %}
+  {% paginate collection.products by 9 %}
 
-<div class="shop-page py-5">
-  <div class="container">
-    <div class="row">
+  <div class="shop-page py-5">
+    <div class="container">
+      <div class="row">
 
-      <!-- 🔶 Sidebar -->
-      <div class="col-lg-3 mb-4">
-        <div class="filter-sidebar">
+        <!-- 🔶 Sidebar -->
+        <div class="col-lg-3 mb-4">
+          <div class="filter-sidebar">
 
-          <h5 class="mb-3">Filters</h5>
+            <h5 class="mb-3">Filters</h5>
 
-          <!-- Category -->
-          <div class="filter-block">
-            <h6>T-shirts</h6>
-            <h6>Shorts</h6>
-            <h6>Shirts</h6>
-            <h6>Hoodie</h6>
-            <h6>Jeans</h6>
-          </div>
-
-          <!-- Price -->
-          <div class="filter-block mt-4">
-            <h6>Price</h6>
-            <input type="range" min="50" max="200" class="form-range">
-            <div class="d-flex justify-content-between">
-              <span>$50</span>
-              <span>$200</span>
+            <div class="filter-block">
+              <h6>T-shirts</h6>
+              <h6>Shorts</h6>
+              <h6>Shirts</h6>
+              <h6>Hoodie</h6>
+              <h6>Jeans</h6>
             </div>
-          </div>
 
-          <!-- Colors -->
-          <div class="filter-block mt-4">
-            <h6>Colors</h6>
-            <div class="colors">
-              <span class="color green"></span>
-              <span class="color red"></span>
-              <span class="color yellow"></span>
-              <span class="color orange"></span>
-              <span class="color blue"></span>
-              <span class="color purple"></span>
-              <span class="color black"></span>
+            <div class="filter-block mt-4">
+              <h6>Price</h6>
+              <input type="range" min="50" max="200" class="form-range">
+              <div class="d-flex justify-content-between">
+                <span>$50</span>
+                <span>$200</span>
+              </div>
             </div>
-          </div>
 
-          <!-- Size -->
-          <div class="filter-block mt-4">
-            <h6>Size</h6>
-            <div class="sizes">
-              <span>Small</span>
-              <span>Medium</span>
-              <span class="active">Large</span>
-              <span>X-Large</span>
+            <div class="filter-block mt-4">
+              <h6>Colors</h6>
+              <div class="colors">
+                <span class="color green"></span>
+                <span class="color red"></span>
+                <span class="color yellow"></span>
+                <span class="color orange"></span>
+                <span class="color blue"></span>
+                <span class="color purple"></span>
+                <span class="color black"></span>
+              </div>
             </div>
+
+            <div class="filter-block mt-4">
+              <h6>Size</h6>
+              <div class="sizes">
+                <span>Small</span>
+                <span>Medium</span>
+                <span class="active">Large</span>
+                <span>X-Large</span>
+              </div>
+            </div>
+
           </div>
-
-        </div>
-      </div>
-
-      <!-- 🔶 Product Area -->
-      <div class="col-lg-9">
-
-        <!-- Top bar -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h3>{{ collection.title }}</h3>
-
-          <form method="get">
-            <select name="sort_by" onchange="this.form.submit()" class="form-select w-auto">
-              <option value="">Most Popular</option>
-              <option value="price-ascending">Low to High</option>
-              <option value="price-descending">High to Low</option>
-            </select>
-          </form>
         </div>
 
-        <!-- Products -->
-        <div class="row">
+        <!-- 🔶 Product Area -->
+        <div class="col-lg-9">
 
-          {% for product in collection.products %}
-          <div class="col-md-4 col-sm-6 mb-4">
+          <!-- Top bar -->
+          <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <h3 class="m-0">{{ collection.title }}</h3>
 
-            <div class="product-card">
+            <!-- Sort -->
+            <div class="products_shorting">
+              <select id="sort_by" class="form-select w-auto">
+                {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                {%- for option in collection.sort_options -%}
+                  <option value="{{ option.value }}" {% if sort_by == option.value %}selected{% endif %}>
+                    {{ option.name }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </div>
 
-              <a href="{{ product.url }}">
-                <img src="{{ product.featured_image | image_url }}" alt="">
-              </a>
+          </div>
 
-              <div class="product-info">
-                <h6>{{ product.title }}</h6>
+          <!-- Products -->
+          <div class="row g-4">
+            {% for product in collection.products %}
+              <div class="col-lg-4 col-md-6 col-6">
+                <div class="product-card">
 
-                <!-- Fake rating UI -->
-                <div class="rating">
-                  ⭐⭐⭐⭐☆
-                  <span>4.5/5</span>
-                </div>
+                  <a href="{{ product.url }}">
+                    <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title }}">
+                  </a>
 
-                <div class="price">
-                  {{ product.price | money }}
+                  <div class="product-info">
+                    <h6>{{ product.title }}</h6>
+
+                    <div class="price">
+                      {{ product.price | money }}
+                    </div>
+                  </div>
+
                 </div>
               </div>
-
-            </div>
-
+            {% endfor %}
           </div>
-          {% endfor %}
 
-        </div>
+          <!-- Pagination -->
+          <div class="text-center mt-4">
+            {{ paginate | default_pagination }}
+          </div>
 
-        <!-- Pagination -->
-        <div class="text-center mt-4">
-          {{ paginate | default_pagination }}
         </div>
 
       </div>
-
     </div>
   </div>
-</div>
 
-{% endpaginate %}
+  {% endpaginate %}
 </div>
-
 
 <style>
- .shop-page {
+  .shop-page {
   background: #f5f5f5;
 }
 
@@ -201,21 +193,130 @@
   margin-top: 10px;
 }
 
-.rating {
-  font-size: 14px;
-  color: #f4b400;
-}
-
 .price {
   font-weight: bold;
   margin-top: 5px;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .product-card img {
+    height: 160px;
+  }
+}
+  .shop-page {
+    background: #f5f5f5;
+  }
+
+  /* Sidebar */
+  .filter-sidebar {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .filter-block h6 {
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+
+  /* Colors */
+  .colors {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .color {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .green {
+    background: green;
+  }
+
+  .red {
+    background: red;
+  }
+
+  .yellow {
+    background: gold;
+  }
+
+  .orange {
+    background: orange;
+  }
+
+  .blue {
+    background: blue;
+  }
+
+  .purple {
+    background: purple;
+  }
+
+  .black {
+    background: black;
+  }
+
+  /* Sizes */
+  .sizes span {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #eee;
+    margin: 4px;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .sizes .active {
+    background: black;
+    color: #fff;
+  }
+
+  /* Product Card */
+  .product-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    transition: 0.3s;
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+  }
+
+  .product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .product-info h6 {
+    margin-top: 10px;
+  }
+
+  .rating {
+    font-size: 14px;
+    color: #f4b400;
+  }
+
+  .price {
+    font-weight: bold;
+    margin-top: 5px;
+  }
 </style>
 
 {% schema %}
 
-  {
-    "name": "Collection",
-    "settings": []  
-  }
+{
+"name": "Collection",
+"settings": []
+}
 {% endschema %}

@@ -1,0 +1,25 @@
+<div class="col-md-4 col-sm-6 mb-4">
+
+    <div class="product-card">
+
+        <a href="{{ product.url }}">
+            <img src="{{ product.featured_image | image_url }}" alt="">
+        </a>
+
+        <div class="product-info">
+            <h6>{{ product.title }}</h6>
+
+            <!-- Fake rating UI -->
+            <div class="rating">
+                ⭐⭐⭐⭐☆
+                <span>4.5/5</span>
+            </div>
+
+            <div class="price">
+                {{ product.price | money }}
+            </div>
+        </div>
+
+    </div>
+
+</div>
