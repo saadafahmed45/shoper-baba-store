@@ -24,6 +24,11 @@ background: #fff;
 /* header nav end  */
 
 
+
+
+
+
+
 /* feature products card  */
 /* Section Spacing */
 .feature_products {
@@ -94,7 +99,7 @@ background: #fff;
 
 /* Content */
 .products_content {
-  text-align: {{ section.settings.products_align }};
+  text-align: var(--products-align, left);
   padding: 0 5px;
 }
 

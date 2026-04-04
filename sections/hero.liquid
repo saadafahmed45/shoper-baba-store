@@ -4,18 +4,19 @@
 
       <!-- Content -->
       <div class="hero_content">
-        <div class="hero_badge">New Collection 2024</div>
 
-        <h1>FIND CLOTHES THAT MATCHES YOUR STYLE</h1>
+        <h1>{{ section.settings.hero_heading }}</h1>
 
-        <p>
-          Browse through our diverse range of meticulously crafted garments,
-          designed to bring out your individuality and cater to your sense of style.
-        </p>
+        <p>{{ section.settings.hero_paragraph }}</p>
 
         <div class="hero_actions">
-          <button class="btn-dark">Shop Now</button>
-          <button class="btn-outline">Explore Looks</button>
+          <a class="btn-dark" href="{{ section.settings.shop_button_url }}">
+            {{ section.settings.shop_button }}
+          </a>
+
+          <a class="btn-outline" href="{{ section.settings.explore_button_url }}">
+            {{ section.settings.explore_button }}
+          </a>
         </div>
 
         <div class="counter_sec">
@@ -45,28 +46,23 @@
 
         {% if section.settings.hero_img %}
           <img 
-            src="{{ section.settings.hero_img | image_url: width: 1200 }}" 
+            src="{{ section.settings.hero_img | image_url: width: 1200 }}"
             alt="{{ section.settings.hero_img_alt | default: 'Hero image' }}"
-            loading="eager"
-          >
+            loading="eager">
         {% else %}
           <div class="hero_placeholder">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21 15 16 10 5 21"/>
-            </svg>
             <p>Upload hero image</p>
           </div>
         {% endif %}
 
-        <!-- Floating Tags -->
         <div class="float_tag float_tag--top">
-          <span class="dot"></span> New Arrivals
+          <span class="dot"></span>
+          {{ section.settings.float_tag_top }}
         </div>
 
         <div class="float_tag float_tag--bottom">
-          ⭐ 4.9 Rating
+          <span class="dot"></span>
+          {{ section.settings.float_tag_bottom }}
         </div>
 
       </div>
@@ -76,255 +72,191 @@
 </div>
 
 <style>
-:root {
-  --hero-bg: {{ section.settings.hero_bg_color | default: '#FAF8F5' }};
-  --text-dark: #0f0f0f;
-  --text-mid: #555;
-  --text-light: #888;
-  --accent: #0f0f0f;
-  --accent-hover: #2a2a2a;
-  --border: #e5e0d8;
-  --radius-pill: 50px;
-  --radius-card: 20px;
-  --font-display: 'Syne', sans-serif;
-  --font-body: 'Manrope', sans-serif;
-  --container: {{ section.settings.container_width | default: 1200 }}px;
-}
+  :root {
+    --hero-bg: {{ section.settings.hero_bg_color | default: '#FAF8F5' }};
+    --container: {{ section.settings.container_width | default: 1200 }}px;
 
-.hero_section {
-  background-color: var(--hero-bg);
-  padding: 80px 0 60px;
-  overflow: hidden;
-  position: relative;
-}
-
-.hero_section::before {
-  content: '';
-  position: absolute;
-  top: -120px;
-  right: -120px;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(0,0,0,0.04) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.my_container {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 0 24px;
-  box-sizing: border-box;
-}
-
-.wrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 60px;
-}
-
-.hero_content {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.hero_badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-dark);
-  background: white;
-  border: 1px solid var(--border);
-  padding: 6px 16px;
-  border-radius: var(--radius-pill);
-  width: fit-content;
-}
-
-.hero_content h1 {
-  font-family: var(--font-display);
-  font-size: clamp(32px, 4.5vw, 58px);
-  font-weight: 800;
-  line-height: 1.1;
-  color: var(--text-dark);
-  margin: 0;
-}
-
-.hero_content p {
-  font-family: var(--font-body);
-  font-size: clamp(15px, 1.2vw, 18px);
-  line-height: 1.7;
-  color: var(--text-mid);
-  margin: 0;
-  max-width: 480px;
-}
-
-.hero_actions {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.btn-dark {
-  background: var(--text-dark);
-  color: #fff;
-  padding: 14px 36px;
-  border-radius: var(--radius-pill);
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn-dark:hover {
-  background: var(--accent-hover);
-  transform: translateY(-2px);
-}
-
-.btn-outline {
-  background: transparent;
-  border: 2px solid var(--border);
-  padding: 14px 36px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn-outline:hover {
-  border-color: var(--text-dark);
-}
-
-.counter_sec {
-  display: flex;
-  border-top: 1px solid var(--border);
-  padding-top: 24px;
-}
-
-.counter {
-  flex: 1;
-}
-
-.counter h2 {
-  font-size: 28px;
-  margin: 0;
-}
-
-.counter span {
-  font-size: 13px;
-  color: var(--text-light);
-}
-
-.divider {
-  width: 1px;
-  background: var(--border);
-  margin: 0 20px;
-}
-
-.hero_img {
-  position: relative;
-}
-
-.hero_img img {
-  width: 100%;
-  max-width: 520px;
-  border-radius: var(--radius-card);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.12);
-}
-
-.hero_placeholder {
-  width: 100%;
-  max-width: 520px;
-  aspect-ratio: 4/5;
-  background: #ede9e3;
-  border-radius: var(--radius-card);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.float_tag {
-  position: absolute;
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  padding: 10px 18px;
-  font-size: 13px;
-  animation: floatY 4s ease-in-out infinite;
-}
-
-.float_tag--top {
-  top: 12%;
-  left: -10px;
-}
-
-.float_tag--bottom {
-  bottom: 12%;
-  right: -10px;
-}
-
-@keyframes floatY {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .wrapper {
-    grid-template-columns: 1fr;
-    text-align: center;
+    --text-dark: #0f0f0f;
+    --text-mid: #555;
+    --text-light: #888;
+    --border: #e5e0d8;
+    --radius-pill: 50px;
+    --radius-card: 20px;
   }
 
-  .hero_content {
+  .hero_section {
+    background-color: var(--hero-bg);
+    padding: 80px 0 60px;
+  }
+
+  .my_container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
     align-items: center;
   }
 
-  .counter_sec {
-    justify-content: center;
+  .hero_content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
-}
+
+  .hero_content h1 {
+    font-size: clamp(32px, 4.5vw, 58px);
+    font-weight: 800;
+  }
+
+  .hero_content p {
+    font-size: 16px;
+    color: var(--text-mid);
+    max-width: 480px;
+  }
+
+  .hero_actions {
+    display: flex;
+    gap: 16px;
+  }
+
+  .btn-dark,
+  .btn-outline {
+    padding: 14px 36px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-dark {
+    background: #000;
+    color: #fff;
+  }
+
+  .btn-outline {
+    border: 2px solid var(--border);
+    color: #000;
+  }
+
+  .counter_sec {
+    display: flex;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+
+  .divider {
+    width: 1px;
+    background: var(--border);
+    margin: 0 20px;
+  }
+
+  .hero_img img {
+    width: 100%;
+    max-width: 520px;
+    border-radius: var(--radius-card);
+  }
+
+  @media (max-width: 900px) {
+    .wrapper {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+  }
 </style>
 
 {% schema %}
 {
-  "name": "Hero Section",
-  "settings": [
-    {
-      "type": "image_picker",
-      "id": "hero_img",
-      "label": "Hero Image"
-    },
-    {
-      "type": "text",
-      "id": "hero_img_alt",
-      "label": "Image Alt Text",
-      "default": "Hero image"
-    },
-    {
-      "type": "color",
-      "id": "hero_bg_color",
-      "label": "Background Color",
-      "default": "#FAF8F5"
-    },
-    {
-      "type": "range",
-      "id": "container_width",
-      "label": "Container Width (px)",
-      "min": 1000,
-      "max": 1600,
-      "step": 20,
-      "default": 1200
-    }
-  ],
-  "presets": [
-    {
-      "name": "Hero Section"
-    }
-  ]
+"name": "Hero Section",
+"settings": [
+{
+"type": "text",
+"id": "hero_heading",
+"label": "Heading",
+"default": "FIND CLOTHES THAT MATCHES YOUR STYLE"
+},
+
+{
+"type": "textarea",
+"id": "hero_paragraph",
+"label": "Paragraph",
+"default": "Browse through our diverse range of meticulously crafted garments, designed to bring out your individualityand cater to your sense of style."
+
+},
+{
+  "type": "text",
+  "id": "shop_button",
+  "label": "Shop Now Button Text",
+  "default": "Shop Now"
+},
+{
+  "type": "text",
+  "id": "explore_button",
+  "label": "Explore Button Text",
+  "default": "Explore Now"
+},
+{
+"type": "url",
+"id": "shop_button_url",
+"label": "Shop Now Button URL",
+"default": "/"
+
+},
+{
+"type": "url",
+"id": "explore_button_url",
+"label": "Explore Button URL",
+"default": "/"
+
+},
+{
+"type": "text",
+"id": "float_tag_top",
+"label": "Top Floating Tag",
+"default": "New Arrivals"
+
+},
+{
+"type": "text",
+"id": "float_tag_bottom",
+"label": "Bottom Floating Tag",
+"default": "⭐ 4.9 Rating"
+},
+
+{
+"type": "image_picker",
+"id": "hero_img",
+"label": "Hero Image"
+},
+{
+"type": "text",
+"id": "hero_img_alt",
+"label": "Image Alt Text",
+"default": "Hero image"
+},
+{
+"type": "color",
+"id": "hero_bg_color",
+"label": "Background Color",
+"default": "#FAF8F5"
+},
+{
+"type": "range",
+"id": "container_width",
+"label": "Container Width (px)",
+"min": 1000,
+"max": 1600,
+"step": 20,
+"default": 1200
+}
+],
+"presets": [
+{
+"name": "Hero Section"
+}
+]
 }
 {% endschema %}
