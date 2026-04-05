@@ -12,6 +12,14 @@
     "main": {
       "type": "hero",
       "settings": {
+        "hero_heading": "FIND CLOTHES THAT MATCHES YOUR STYLE",
+        "hero_paragraph": "Browse through our diverse range of meticulously crafted garments, designed to bring out your individualityand cater to your sense of style.",
+        "shop_button": "Shop Now",
+        "explore_button": "Explore Now",
+        "shop_button_url": "/",
+        "explore_button_url": "/",
+        "float_tag_top": "New Arrivals",
+        "float_tag_bottom": "⭐ 4.9 Rating",
         "hero_img": "shopify://shop_images/kraken-kitty-chroma-01-500x500.webp",
         "hero_img_alt": "Hero image",
         "hero_bg_color": "#f8f9fa",
@@ -98,6 +106,34 @@
         "gym_img": "shopify://shop_images/image_14.png",
         "gym_link": ""
       }
+    },
+    "short_banner_DxtJQC": {
+      "type": "short-banner",
+      "name": "Advanced Short Banner",
+      "settings": {
+        "bg_image": "shopify://shop_images/abt2.jpg",
+        "overlay_opacity": 40,
+        "banner_height": "medium",
+        "text_align": "center",
+        "parallax": false,
+        "heading": "New Collection",
+        "subtext": "Discover our latest arrivals",
+        "button_text": "Shop Now",
+        "button_url": "shopify://collections/all"
+      }
+    },
+    "image_text_RnQBgD": {
+      "type": "image-text",
+      "name": "Image Text Section",
+      "settings": {
+        "heading": "Style How To Style Winter Whites",
+        "paragraph": "Do pure winter chic with a classic cashmere white sweater. Made in the softest cashmere, it’s a sweater that will last season after season. Effortlessly elevating any winter outfit, a white sweater is a must for any capsule collection. Just make sure you keep it clean and stain free, to maintain that clean, polished look. Pair it with dark jeans or Utility Barrel pants for a casual yet refined ensemble, or layer it over a collared shirt for a preppy touch.",
+        "image": "shopify://shop_images/drs.jpg",
+        "image_size": "medium",
+        "layout": "left",
+        "button_url": "/",
+        "button_text": "Learn More"
+      }
     }
   },
   "order": [
@@ -105,6 +141,8 @@
     "brand_icons_KHfYrn",
     "feature_products_zAAfcJ",
     "feature_products_TLPe3T",
-    "dress_style_section_eRVJxD"
+    "dress_style_section_eRVJxD",
+    "short_banner_DxtJQC",
+    "image_text_RnQBgD"
   ]
 }
