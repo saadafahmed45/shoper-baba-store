@@ -1,23 +1,98 @@
-{% comment %}
-  This section is used in the 404 template to render page shown when customers
-  enter an invalid store URL.
+<div class="page_404">
+  <div class="container">
+    
+    <div class="content">
+      <h1>404</h1>
+      <h2>{{ '404.title' | t }}</h2>
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/404
-{% endcomment %}
+      <p>{{ '404.not_found' | t }}</p>
 
-<h1>{{ '404.title' | t }}</h1>
+      <div class="actions">
+        <a href="{{ routes.root_url }}" class="btn primary">
+          Go Home
+        </a>
 
-<p>
-  {{ '404.not_found' | t }}
-</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn outline">
+          Continue Shopping
+        </a>
+      </div>
+    </div>
 
-<a href="{{ routes.all_products_collection_url }}">
-  {{ '404.back_to_shopping' | t }}
-</a>
+  </div>
+</div>
+
+<style>
+.page_404 {
+  padding: 100px 0;
+  text-align: center;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+.content h1 {
+  font-size: 120px;
+  margin: 0;
+  font-weight: 800;
+}
+
+.content h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.content p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.btn.primary {
+  background: #000;
+  color: #fff;
+}
+
+.btn.outline {
+  border: 2px solid #000;
+  color: #000;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .content h1 {
+    font-size: 80px;
+  }
+
+  .content h2 {
+    font-size: 22px;
+  }
+}
+</style>
 
 {% schema %}
 {
-  "name": "t:general.404",
+  "name": "404 Page",
   "settings": []
 }
 {% endschema %}

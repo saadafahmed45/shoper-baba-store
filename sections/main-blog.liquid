@@ -1,0 +1,21 @@
+ <div class="blog_page py-5">
+    <div class="conatiner">
+        <h3 class="title">
+            {{ 'blog.title' | t }}
+        </h3>
+      {% if blog.articles.size > 0 %}
+        <div class="articles">
+          {% for article in blog.articles %}
+            <div class="article">
+              <a href="{{ article.url }}" class="article_link">
+                <h4 class="article_title">{{ article.title }}</h4>
+                <p class="article_excerpt">{{ article.excerpt | strip_html | truncate: 100 }}</p>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>{{ 'blog.no_articles' | t }}</p>
+      {% endif %}
+    </div>
+ </div>
